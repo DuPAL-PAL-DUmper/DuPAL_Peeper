@@ -1,5 +1,7 @@
 package info.hkzlab.dupal.peeper.utilities;
 
+import java.security.InvalidParameterException;
+
 public class BitUtils {
     // The following array will map an entry in an ordered list (1-to-20) of pins to the correct shift in the DuPAL write command
     private static int[] h2d_write_20 = new int[] { // human-to-DuPAL conversion map for writing commands (20 pin devices)
@@ -71,6 +73,20 @@ public class BitUtils {
     };
 
     private BitUtils() {};
+
+    static public int build_WriteMask(boolean[] states) {
+        int mask = 0;
+
+        int[] map;
+
+        if(states.length == h2d_write_20.length) map = h2d_write_20;
+        else if (states.length == h2d_write_24.length) map = h2d_write_24;
+        else throw new InvalidParameterException("States array length ("+states.length+") does not match the length for 20 or 24 pin devices");
+
+        for(int idx = 0; idx < states.length; idx++) mask |= (states[idx] ? 1 : 0) << map[idx];
+
+        return mask;
+    }
    
     static public int countBits(int mask) {
         int tot = 0;
