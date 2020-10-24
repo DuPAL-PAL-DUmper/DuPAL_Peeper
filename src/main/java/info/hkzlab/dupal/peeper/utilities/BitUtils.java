@@ -1,6 +1,75 @@
 package info.hkzlab.dupal.peeper.utilities;
 
 public class BitUtils {
+    // The following array will map an entry in an ordered list (1-to-20) of pins to the correct shift in the DuPAL write command
+    private static int[] h2d_write_20 = new int[] { // human-to-DuPAL conversion map for writing commands (20 pin devices)
+       0,  // 1
+       1,  // 2
+       2,  // 3
+       3,  // 4
+       4,  // 5
+       5,  // 6
+       6,  // 7
+       7,  // 8
+       8,  // 9
+       9,  // 11
+       17, // 12
+       15, // 13
+       14, // 14
+       13, // 15
+       12, // 16
+       11, // 17
+       10, // 18
+       16  // 19
+    }; 
+
+    private static int[] h2d_write_24 = new int[] { // human-to-DuPAL conversion map for writing commands (24 pin devices)
+       0,  // 1
+       1,  // 2
+       2,  // 3
+       3,  // 4
+       4,  // 5
+       5,  // 6
+       6,  // 7
+       7,  // 8
+       8,  // 9
+       9,  // 10
+       18, // 11
+       19, // 13
+       20, // 14
+       10, // 15
+       11, // 16
+       12, // 17
+       13, // 18
+       14, // 19
+       15, // 20
+       16, // 21
+       17, // 22
+       21  // 23
+    };
+
+    private static int[] d2h_read_20 = new int[] { // Add 12 to these to get the pin number
+        6, // 0
+        5, // 1
+        4, // 2
+        3, // 3
+        2, // 4
+        1, // 5
+        7, // 6
+        0  // 7
+    };
+    
+    private static int[] d2h_read_24 = new int[] { // Add 15 to these to get the pin number
+        0, // 0
+        1, // 1
+        2, // 2
+        3, // 3
+        4, // 4
+        5, // 5
+        6, // 6
+        7  // 7
+    };
+
     private BitUtils() {};
    
     static public int countBits(int mask) {
