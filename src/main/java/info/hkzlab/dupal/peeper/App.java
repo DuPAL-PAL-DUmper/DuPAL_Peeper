@@ -6,25 +6,20 @@ import org.slf4j.*;
 
 import info.hkzlab.dupal.peeper.board.boardio.*;
 import info.hkzlab.dupal.peeper.devices.*;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
-public class App {
-    public static volatile String[] palTypes = { 
-                                                // Simple devices
-                                                PAL10L8Specs.PAL_TYPE,
-                                                PAL12H6Specs.PAL_TYPE,
+public class App extends Application {
+    public static volatile String[] palTypes = {
+            // Simple devices
+            PAL10L8Specs.PAL_TYPE, PAL12H6Specs.PAL_TYPE,
 
-                                                // Asynchronous outputs
-                                                PAL16L8Specs.PAL_TYPE,
-                                                PAL20L8Specs.PAL_TYPE,
+            // Asynchronous outputs
+            PAL16L8Specs.PAL_TYPE, PAL20L8Specs.PAL_TYPE,
 
-                                                // Registered devices
-                                                PAL16R4Specs.PAL_TYPE,
-                                                PAL16R6Specs.PAL_TYPE,
-                                                PAL16R8Specs.PAL_TYPE,
-                                                PAL20R4Specs.PAL_TYPE,
-                                                PAL20R6Specs.PAL_TYPE,
-                                                PAL20R8Specs.PAL_TYPE 
-                                            };
+            // Registered devices
+            PAL16R4Specs.PAL_TYPE, PAL16R6Specs.PAL_TYPE, PAL16R8Specs.PAL_TYPE, PAL20R4Specs.PAL_TYPE,
+            PAL20R6Specs.PAL_TYPE, PAL20R8Specs.PAL_TYPE };
 
     private final static Logger logger = LoggerFactory.getLogger(App.class);
 
@@ -39,12 +34,11 @@ public class App {
         if (args.length < 2) {
             StringBuffer supportedPALs = new StringBuffer();
 
-            for(String palT : palTypes) {
-                supportedPALs.append("\t"+palT+"\n");
+            for (String palT : palTypes) {
+                supportedPALs.append("\t" + palT + "\n");
             }
 
-            logger.error("Wrong number of arguments passed.\n"
-                    + "dupal_analyzer <serial_port> <pal_type>\n"
+            logger.error("Wrong number of arguments passed.\n" + "dupal_analyzer <serial_port> <pal_type>\n"
                     + "Where <pal_type> can be:\n" + supportedPALs.toString() + "\n");
 
             return;
@@ -58,7 +52,7 @@ public class App {
         if (!dpm.enterRemoteMode()) {
             logger.error("Unable to put DuPAL board in REMOTE MODE!");
             System.exit(-1);
-        } 
+        }
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
@@ -67,18 +61,26 @@ public class App {
             }
         });
 
+        launch(args);
     }
 
     private static void parseArgs(String[] args) {
         serialDevice = args[0];
 
         try {
-            Class<?> specsClass = Class.forName("info.hkzlab.dupal.peeper.devices.PAL" + args[1].toUpperCase() + "Specs");
-            pspecs = (PALSpecs) specsClass.getConstructor().newInstance(new Object[]{});
+            Class<?> specsClass = Class
+                    .forName("info.hkzlab.dupal.peeper.devices.PAL" + args[1].toUpperCase() + "Specs");
+            pspecs = (PALSpecs) specsClass.getConstructor().newInstance(new Object[] {});
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
                 | InvocationTargetException | NoSuchMethodException | SecurityException e) {
             logger.error("Invalid PAL type selected.");
             System.exit(-1);
         }
+    }
+
+    @Override
+    public void start(Stage arg0) throws Exception {
+        // TODO Auto-generated method stub
+
     }
 }
