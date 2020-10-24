@@ -20,4 +20,62 @@ public class UtilsTest
         assertEquals("0b01010101 with a scatter mask 0x0F should be scattered into 0b00000101", 0x05, BitUtils.scatterBitField(0x55, 0x0F));
         assertEquals("0b01011111 with a scatter mask 0xF0 should be scattered into 0b11110000", 0xF0, BitUtils.scatterBitField(0x5F, 0xF0));
     }
+
+    @Test
+    public void bitUtilsShouldCorrectlyGenerateA20PinWriteMask() {
+        boolean[] pinArray = new boolean[] {
+            true,  // 1
+            true,  // 2
+            false, // 3
+            false, // 4
+            true,  // 5
+            true,  // 6
+            false, // 7
+            false, // 8
+            true,  // 9
+            false, // 11
+            true,  // 12
+            false, // 13
+            true,  // 14
+            false, // 15
+            true,  // 16
+            false, // 17
+            false, // 18
+            true   // 19
+        };
+
+        int mask = BitUtils.build_WriteMask(pinArray);
+        assertEquals(mask, 0x35133);
+    }
+
+    @Test
+    public void bitUtilsShouldCorrectlyGenerateA24PinWriteMask() {
+        boolean[] pinArray = new boolean[] {
+            true,  // 1
+            true,  // 2
+            false, // 3
+            true,  // 4
+            false, // 5
+            true,  // 6
+            false, // 7
+            true,  // 8
+            true,  // 9
+            false, // 10
+            true,  // 11
+            false, // 13
+            true,  // 14
+            false, // 15
+            true,  // 16
+            false, // 17
+            false, // 18
+            true,  // 19
+            false, // 20
+            false, // 21
+            true,  // 22
+            false, // 23
+        };
+
+        int mask = BitUtils.build_WriteMask(pinArray);
+        assertEquals(mask, 0x1649ab);
+    }
 }
