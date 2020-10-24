@@ -1,5 +1,6 @@
 package info.hkzlab.dupal.peeper;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -44,8 +45,8 @@ public class UtilsTest
             true   // 19
         };
 
-        int mask = BitUtils.build_WriteMask(pinArray);
-        assertEquals(mask, 0x35133);
+        int mask = BitUtils.build_WriteMaskFromPins(pinArray);
+        assertEquals(0x35133, mask);
     }
 
     @Test
@@ -75,7 +76,23 @@ public class UtilsTest
             false, // 23
         };
 
-        int mask = BitUtils.build_WriteMask(pinArray);
-        assertEquals(mask, 0x1649ab);
+        int mask = BitUtils.build_WriteMaskFromPins(pinArray);
+        assertEquals(0x1649ab, mask);
+    }
+
+    @Test
+    public void bitUtilsShouldCorrectlyGenerateA20PinReadArray() {
+        int mask = 0x54;
+        boolean[] pins = BitUtils.build_ReadPinsArrayFromMask(mask, false);
+
+        assertArrayEquals(new boolean[] {false, false, true, false, true, false, false, true}, pins);
+    }
+    
+    @Test
+    public void bitUtilsShouldCorrectlyGenerateA24PinReadArray() {
+        int mask = 0x54;
+        boolean[] pins = BitUtils.build_ReadPinsArrayFromMask(mask, true);
+
+        assertArrayEquals(new boolean[] {false, false, true, false, true, false, true, false}, pins);
     }
 }

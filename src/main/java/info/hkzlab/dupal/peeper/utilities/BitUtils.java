@@ -51,14 +51,14 @@ public class BitUtils {
     };
 
     private static int[] d2h_read_20 = new int[] { // Add 12 to these to get the pin number
-        6, // 0
+        7, // 0
         5, // 1
         4, // 2
         3, // 3
         2, // 4
         1, // 5
-        7, // 6
-        0  // 7
+        0, // 6
+        6  // 7
     };
     
     private static int[] d2h_read_24 = new int[] { // Add 15 to these to get the pin number
@@ -74,18 +74,28 @@ public class BitUtils {
 
     private BitUtils() {};
 
-    static public int build_WriteMask(boolean[] states) {
+    static public int build_WriteMaskFromPins(boolean[] pins) {
         int mask = 0;
 
         int[] map;
 
-        if(states.length == h2d_write_20.length) map = h2d_write_20;
-        else if (states.length == h2d_write_24.length) map = h2d_write_24;
-        else throw new InvalidParameterException("States array length ("+states.length+") does not match the length for 20 or 24 pin devices");
+        if(pins.length == h2d_write_20.length) map = h2d_write_20;
+        else if (pins.length == h2d_write_24.length) map = h2d_write_24;
+        else throw new InvalidParameterException("Pins array length ("+pins.length+") does not match the length for 20 or 24 pin devices");
 
-        for(int idx = 0; idx < states.length; idx++) mask |= (states[idx] ? 1 : 0) << map[idx];
+        for(int idx = 0; idx < pins.length; idx++) mask |= (pins[idx] ? 1 : 0) << map[idx];
 
         return mask;
+    }
+
+    static public boolean[] build_ReadPinsArrayFromMask(int mask, boolean pal24) {
+        boolean[] pins = new boolean[8];
+
+        int[] map = pal24 ? d2h_read_24 : d2h_read_20;
+
+        for(int idx = 0; idx < pins.length; idx++) pins[idx] = (mask & (1 << map[idx])) > 0;
+
+        return pins;
     }
    
     static public int countBits(int mask) {
