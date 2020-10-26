@@ -32,6 +32,9 @@ public class DuPALPeephole implements PeepholeInterface {
 
     @Override
     public boolean open() throws PeepholeException {
+        int bv = dpci.getBoardVersion();
+        if(bv < dpci.palSpecs.minimumBoardRev()) throw new PeepholeException("This IC is not supported by this board type");
+
         return false;
     }
 
