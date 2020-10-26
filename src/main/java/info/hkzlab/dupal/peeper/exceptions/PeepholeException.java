@@ -1,9 +1,11 @@
 package info.hkzlab.dupal.peeper.exceptions;
 
-public class DuPALAnalyzerException extends Exception {
+import java.io.IOException;
+
+public class PeepholeException extends IOException {
     private static final long serialVersionUID = 1L;
 
-    public DuPALAnalyzerException(String message) {
+    public PeepholeException(String message) {
         super(message);
     }
 }
