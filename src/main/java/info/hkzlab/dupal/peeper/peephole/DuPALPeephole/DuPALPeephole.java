@@ -1,33 +1,47 @@
 package info.hkzlab.dupal.peeper.peephole.DuPALPeephole;
 
 import info.hkzlab.dupal.peeper.board.boardio.DuPALCmdInterface;
+import info.hkzlab.dupal.peeper.exceptions.DuPALBoardException;
 import info.hkzlab.dupal.peeper.exceptions.PeepholeException;
 import info.hkzlab.dupal.peeper.peephole.PeepholeInterface;
+import info.hkzlab.dupal.peeper.utilities.BitUtils;
 
 public class DuPALPeephole implements PeepholeInterface {
     private DuPALCmdInterface dpci;
+    private boolean is24Pins = false;
 
     public DuPALPeephole(DuPALCmdInterface dpci) {
         this.dpci = dpci;
-    }
-
-
-    @Override
-    public void write(boolean[] pins) {
-        // TODO Auto-generated method stub
-
+        is24Pins = dpci.palSpecs.getPinCount_IN() > 10;
     }
 
     @Override
-    public boolean[] read() {
-        // TODO Auto-generated method stub
-        return null;
+    public void write(boolean[] pins) throws PeepholeException {
+        int data = BitUtils.build_WriteMaskFromPins(pins);
+        try {
+            dpci.write(data);
+        } catch (DuPALBoardException e) {
+            throw new PeepholeException(e.toString());
+        }
     }
 
     @Override
-    public void clock() {
-        // TODO Auto-generated method stub
+    public boolean[] read() throws PeepholeException {
+        int val = dpci.read();
 
+        if(val < 0) throw new PeepholeException("Unable to read from DuPAL");
+        
+        return BitUtils.build_ReadPinsArrayFromMask(val, is24Pins);
+    }
+
+    @Override
+    public void clock(boolean[] pins) throws PeepholeException {
+        int data = BitUtils.build_WriteMaskFromPins(pins);
+        try {
+            dpci.writeAndPulseClock(data);
+        } catch (DuPALBoardException e) {
+            throw new PeepholeException(e.toString());
+        }
     }
 
     @Override
