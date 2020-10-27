@@ -6,6 +6,8 @@ import org.slf4j.*;
 
 import info.hkzlab.dupal.peeper.board.boardio.*;
 import info.hkzlab.dupal.peeper.devices.*;
+import info.hkzlab.dupal.peeper.peephole.Peephole;
+import info.hkzlab.dupal.peeper.peephole.DuPALPeephole.DuPALPeephole;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -27,6 +29,7 @@ public class App extends Application {
 
     private static String serialDevice = null;
     private static PALSpecs pspecs = null;
+    private static Peephole phole = null;
 
     public static void main(String[] args) throws Exception {
         logger.info("DuPAL Peeper " + version);
@@ -41,7 +44,7 @@ public class App extends Application {
             logger.error("Wrong number of arguments passed.\n" + "dupal_analyzer <serial_port> <pal_type>\n"
                     + "Where <pal_type> can be:\n" + supportedPALs.toString() + "\n");
 
-            return;
+           System.exit(-1);
         }
 
         parseArgs(args);
@@ -54,13 +57,15 @@ public class App extends Application {
             System.exit(-1);
         }
 
+        phole = new DuPALPeephole(dpci);
+
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                dpci.reset();
+                phole.close();
             }
         });
-
+        
         launch(args);
     }
 
