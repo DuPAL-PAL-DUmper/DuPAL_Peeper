@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import info.hkzlab.dupal.peeper.board.boardio.DuPALCmdInterface;
-import info.hkzlab.dupal.peeper.devices.PALSpecs;
 import info.hkzlab.dupal.peeper.exceptions.DuPALBoardException;
 import info.hkzlab.dupal.peeper.exceptions.PeepholeException;
 import info.hkzlab.dupal.peeper.peephole.Peephole;
