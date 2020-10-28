@@ -1,5 +1,7 @@
 package info.hkzlab.dupal.peeper.controllers;
 
+import info.hkzlab.dupal.peeper.App;
+import info.hkzlab.dupal.peeper.devices.PALSpecs;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -16,6 +18,6 @@ public class PeeperInterfaceController {
     @FXML private ListView<String> writePinList;
 
     public void initialize() {
-
+        PALSpecs pspecs = App.phole.getSpecs();
     } 
 }
