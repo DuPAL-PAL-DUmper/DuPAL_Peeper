@@ -11,7 +11,7 @@ import info.hkzlab.dupal.peeper.peephole.DuPALPeephole.DuPALPeephole;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
+import javafx.scene.control.SplitPane;
 import javafx.stage.Stage;
 
 public class App extends Application {
@@ -31,7 +31,7 @@ public class App extends Application {
     private final static String version = App.class.getPackage().getImplementationVersion();
     private final static String AppName = "DuPAL Peeper";
 
-    private Peephole phole = null;
+    public static Peephole phole = null;
 
     public static void main(String[] args) throws Exception {
         logger.info(AppName + " " + version);
@@ -81,8 +81,10 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle(AppName + " " + version);
         primaryStage.setResizable(false);
+        primaryStage.setHeight(480);
+        primaryStage.setWidth(800);
 
-        HBox box = FXMLLoader.load(App.class.getResource("/ui/peeperui.fxml"));
+        SplitPane box = FXMLLoader.load(App.class.getResource("/ui/peeperui.fxml"));
         Scene scene = new Scene(box);
         primaryStage.setScene(scene);
         primaryStage.show();
