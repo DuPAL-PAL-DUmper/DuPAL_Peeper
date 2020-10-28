@@ -111,7 +111,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>info.hkzlab.dupal.peeper.App</mainClass>
+              <mainClass>info.hkzlab.dupal.peeper.FakeApp</mainClass>
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
               <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
             </manifest>
@@ -148,7 +148,7 @@
           <configuration>
 					  <archive>
 						  <manifest>
-							  <mainClass>info.hkzlab.dupal.peeper.App</mainClass>
+							  <mainClass>info.hkzlab.dupal.peeper.FakeApp</mainClass>
                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                 <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 						  </manifest>

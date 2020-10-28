@@ -9,6 +9,7 @@ import info.hkzlab.dupal.peeper.devices.*;
 import info.hkzlab.dupal.peeper.peephole.Peephole;
 import info.hkzlab.dupal.peeper.peephole.DuPALPeephole.DuPALPeephole;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
 public class App extends Application {
@@ -27,29 +28,41 @@ public class App extends Application {
 
     private final static String version = App.class.getPackage().getImplementationVersion();
 
-    private static String serialDevice = null;
-    private static PALSpecs pspecs = null;
-    private static Peephole phole = null;
+    private Peephole phole = null;
 
     public static void main(String[] args) throws Exception {
         logger.info("DuPAL Peeper " + version);
+        launch(args);
+    }
 
-        if (args.length < 2) {
-            StringBuffer supportedPALs = new StringBuffer();
-
-            for (String palT : palTypes) {
-                supportedPALs.append("\t" + palT + "\n");
-            }
-
-            logger.error("Wrong number of arguments passed.\n" + "dupal_analyzer <serial_port> <pal_type>\n"
-                    + "Where <pal_type> can be:\n" + supportedPALs.toString() + "\n");
-
-           System.exit(-1);
+    @Override
+    public void init() throws Exception {
+        // Obtain PAL type
+        String palType = getParameters().getNamed().get("pal");
+        PALSpecs pspecs = null;
+        if(palType == null) {
+            printUsage();
+            System.exit(-1);
         }
 
-        parseArgs(args);
+        try {
+            Class<?> specsClass = Class.forName("info.hkzlab.dupal.peeper.devices.PAL" + palType.toUpperCase() + "Specs");
+            pspecs = (PALSpecs) specsClass.getConstructor().newInstance(new Object[] {});
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+            logger.error("Invalid PAL type selected.");
+            System.exit(-1);
+        }
 
-        DuPALManager dpm = new DuPALManager(serialDevice);
+        // Obtain serial port
+        String serialPort = getParameters().getNamed().get("serial");
+        if(serialPort == null) {
+            printUsage();
+            System.exit(-1);
+        }
+
+        // Create the connection to the board
+        DuPALManager dpm = new DuPALManager(serialPort);
         DuPALCmdInterface dpci = new DuPALCmdInterface(dpm, pspecs);
 
         if (!dpm.enterRemoteMode()) {
@@ -57,35 +70,29 @@ public class App extends Application {
             System.exit(-1);
         }
 
+        // Build the peephole
         phole = new DuPALPeephole(dpci);
-
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                phole.close();
-            }
-        });
-        
-        launch(args);
-    }
-
-    private static void parseArgs(String[] args) {
-        serialDevice = args[0];
-
-        try {
-            Class<?> specsClass = Class
-                    .forName("info.hkzlab.dupal.peeper.devices.PAL" + args[1].toUpperCase() + "Specs");
-            pspecs = (PALSpecs) specsClass.getConstructor().newInstance(new Object[] {});
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-            logger.error("Invalid PAL type selected.");
-            System.exit(-1);
-        }
     }
 
     @Override
     public void start(Stage arg0) throws Exception {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override 
+    public void stop() throws Exception {
+        if(phole != null) phole.close();
+    }
+
+    private void printUsage() {
+            StringBuffer supportedPALs = new StringBuffer();
+
+            for (String palT : palTypes) {
+                supportedPALs.append("\t" + palT + "\n");
+            }
+
+            logger.error("peeper --serial=<serial_port> --pal=<pal_type>\n"
+                    + "Where <pal_type> can be:\n" + supportedPALs.toString() + "\n");        
     }
 }
