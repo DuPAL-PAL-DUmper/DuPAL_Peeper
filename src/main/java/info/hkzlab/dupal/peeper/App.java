@@ -10,6 +10,8 @@ import info.hkzlab.dupal.peeper.peephole.Peephole;
 import info.hkzlab.dupal.peeper.peephole.DuPALPeephole.DuPALPeephole;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class App extends Application {
@@ -80,7 +82,10 @@ public class App extends Application {
         primaryStage.setTitle(AppName + " " + version);
         primaryStage.setResizable(false);
 
-        //FXMLLoader.load(this.getClass().getResource("peeperui.fxml"));
+        HBox box = FXMLLoader.load(App.class.getResource("/ui/peeperui.fxml"));
+        Scene scene = new Scene(box);
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
     @Override 
