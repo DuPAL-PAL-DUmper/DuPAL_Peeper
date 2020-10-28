@@ -9,7 +9,7 @@ import info.hkzlab.dupal.peeper.devices.*;
 import info.hkzlab.dupal.peeper.peephole.Peephole;
 import info.hkzlab.dupal.peeper.peephole.DuPALPeephole.DuPALPeephole;
 import javafx.application.Application;
-import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 
 public class App extends Application {
@@ -27,11 +27,12 @@ public class App extends Application {
     private final static Logger logger = LoggerFactory.getLogger(App.class);
 
     private final static String version = App.class.getPackage().getImplementationVersion();
+    private final static String AppName = "DuPAL Peeper";
 
     private Peephole phole = null;
 
     public static void main(String[] args) throws Exception {
-        logger.info("DuPAL Peeper " + version);
+        logger.info(AppName + " " + version);
         launch(args);
     }
 
@@ -75,13 +76,17 @@ public class App extends Application {
     }
 
     @Override
-    public void start(Stage arg0) throws Exception {
-        // TODO Auto-generated method stub
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage.setTitle(AppName + " " + version);
+        primaryStage.setResizable(false);
 
+        //FXMLLoader.load(this.getClass().getResource("peeperui.fxml"));
     }
 
     @Override 
     public void stop() throws Exception {
+        logger.info("stopping...");
+
         if(phole != null) phole.close();
     }
 
