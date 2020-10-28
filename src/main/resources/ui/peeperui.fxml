@@ -8,14 +8,11 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.7" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="PeeperInterfaceController">
+<SplitPane dividerPositions="0.7" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="info.hkzlab.dupal.peeper.controllers.PeeperInterfaceController">
   <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
          <children>
@@ -60,17 +57,7 @@
                                              </font>
                                           </Label>
                                           <Separator prefWidth="200.0" />
-                                          <GridPane id="writePinGrid" fx:id="writeGridPane" alignment="CENTER">
-                                            <columnConstraints>
-                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
-                                          </GridPane>
+                                          <ListView fx:id="writePinList" />
                                        </children>
                                     </VBox>
                                  </children>
@@ -116,17 +103,7 @@
                                              </font>
                                           </Label>
                                           <Separator prefWidth="200.0" />
-                                          <GridPane id="readPinGrid" fx:id="readGridPane" alignment="CENTER">
-                                             <columnConstraints>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                             </columnConstraints>
-                                             <rowConstraints>
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                             </rowConstraints>
-                                          </GridPane>
+                                          <ListView fx:id="readPinList" />
                                        </children>
                                     </VBox>
                                  </children>
@@ -135,7 +112,7 @@
                                  <children>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                          <Button id="outRefreshButton" fx:id="readRefreshButton" mnemonicParsing="false" text="Refresh" textAlignment="CENTER">
+                                          <Button fx:id="readRefreshButton" mnemonicParsing="false" text="Refresh" textAlignment="CENTER">
                                              <padding>
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                              </padding>

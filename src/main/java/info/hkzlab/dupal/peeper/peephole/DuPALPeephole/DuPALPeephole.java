@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import info.hkzlab.dupal.peeper.board.boardio.DuPALCmdInterface;
+import info.hkzlab.dupal.peeper.devices.PALSpecs;
 import info.hkzlab.dupal.peeper.exceptions.DuPALBoardException;
 import info.hkzlab.dupal.peeper.exceptions.PeepholeException;
 import info.hkzlab.dupal.peeper.peephole.Peephole;
@@ -19,7 +20,7 @@ public class DuPALPeephole implements Peephole {
         this.dpci = dpci;
         is24Pins = dpci.palSpecs.getPinCount_IN() > 10;
 
-        logger.info("DuPALPeephole -> Instantiating for device " + dpci.palSpecs+ ", 24 pins? " + is24Pins);
+        logger.info("DuPALPeephole -> Instantiating for device " + dpci.palSpecs + ", 24 pins? " + is24Pins);
     }
 
     @Override
@@ -36,8 +37,9 @@ public class DuPALPeephole implements Peephole {
     public boolean[] read() throws PeepholeException {
         int val = dpci.read();
 
-        if(val < 0) throw new PeepholeException("Unable to read from DuPAL");
-        
+        if (val < 0)
+            throw new PeepholeException("Unable to read from DuPAL");
+
         return BitUtils.build_ReadPinsArrayFromMask(val, is24Pins);
     }
 
@@ -54,7 +56,8 @@ public class DuPALPeephole implements Peephole {
     @Override
     public boolean open() throws PeepholeException {
         int bv = dpci.getBoardVersion();
-        if(bv < dpci.palSpecs.minimumBoardRev()) throw new PeepholeException("This IC is not supported by this board type");
+        if (bv < dpci.palSpecs.minimumBoardRev())
+            throw new PeepholeException("This IC is not supported by this board type");
 
         return false;
     }
@@ -63,6 +66,11 @@ public class DuPALPeephole implements Peephole {
     public void close() {
         logger.info("DuPALPeephole -> closing...");
         dpci.reset();
+    }
+
+    @Override
+    public PALSpecs getSpecs() {
+        return dpci.palSpecs;
     }
     
 }
