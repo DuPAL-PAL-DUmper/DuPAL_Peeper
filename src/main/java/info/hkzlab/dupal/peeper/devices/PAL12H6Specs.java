@@ -1,13 +1,8 @@
 package info.hkzlab.dupal.peeper.devices;
 
 public class PAL12H6Specs implements PALSpecs {
-
+    private static final String[] LABELS = { "i1", "i2", "i3", "i4", "i5", "i6", "i7", "i8", "i9", "GND", "i11", "i12", "o13", "o14", "o15", "o16", "o17", "o18", "i19", "VCC" };
     public static final String PAL_TYPE = "12H6";
-
-    private static final String[] LABELS_RO =  { };
-    private static final String[] LABELS_IN =  {  "i1",  "i2",  "i3",  "i4",  "i5",  "i6",  "i7",  "i8",  "i9", "i11",   null,   null,    null,    null,    null,    null,  "i19",  "i12" };
-    private static final String[] LABELS_IO =  { };
-    private static final String[] LABELS_O  =  {  null,  null,  null,  null,  null,  null,  null,  null,  null,  null,  "o18",  "o17",   "o16",   "o15",   "o14",   "o13",   null,   null };
 
     @Override
     public String toString() {
@@ -65,26 +60,6 @@ public class PAL12H6Specs implements PALSpecs {
     }
 
     @Override
-    public String[] getLabels_RO() {
-        return LABELS_RO;
-    }
-
-    @Override
-    public String[] getLabels_O() {
-        return LABELS_O;
-    }
-
-    @Override
-    public String[] getLabels_IO() {
-        return LABELS_IO;
-    }
-
-    @Override
-    public String[] getLabels_IN() {
-        return LABELS_IN;
-    }
-
-    @Override
     public int getPinCount_IN() {
         return 12;
     }
@@ -112,5 +87,20 @@ public class PAL12H6Specs implements PALSpecs {
     @Override
     public int slotNumber() {
         return 0;
+    }
+
+    @Override
+    public int[] getWritePinNumbers() {
+        return PALSpecs.pal20_write_pin_numbers;
+    }
+
+    @Override
+    public int[] getReadPinNumbers() {
+        return PALSpecs.pal20_read_pin_numbers;
+    }
+
+    @Override
+    public String[] getLabels() {
+        return LABELS;
     }
 }

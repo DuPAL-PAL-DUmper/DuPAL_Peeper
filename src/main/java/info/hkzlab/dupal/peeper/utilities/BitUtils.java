@@ -4,7 +4,7 @@ import java.security.InvalidParameterException;
 
 public class BitUtils {
     // The following array will map an entry in an ordered list (1-to-20) of pins to the correct shift in the DuPAL write command
-    private static int[] h2d_write_20 = new int[] { // human-to-DuPAL conversion map for writing commands (20 pin devices)
+    private static final int[] h2d_write_20 = new int[] { // human-to-DuPAL conversion map for writing commands (20 pin devices)
        0,  // 1
        1,  // 2
        2,  // 3
@@ -25,7 +25,7 @@ public class BitUtils {
        16  // 19
     }; 
 
-    private static int[] h2d_write_24 = new int[] { // human-to-DuPAL conversion map for writing commands (24 pin devices)
+    private static final int[] h2d_write_24 = new int[] { // human-to-DuPAL conversion map for writing commands (24 pin devices)
        0,  // 1
        1,  // 2
        2,  // 3
@@ -50,7 +50,7 @@ public class BitUtils {
        21  // 23
     };
 
-    private static int[] d2h_read_20 = new int[] { // Add 12 to these to get the pin number
+    private static final int[] d2h_read_20 = new int[] { // Add 12 to these to get the pin number
         7, // 0
         5, // 1
         4, // 2
@@ -61,7 +61,7 @@ public class BitUtils {
         6  // 7
     };
     
-    private static int[] d2h_read_24 = new int[] { // Add 15 to these to get the pin number
+    private static final int[] d2h_read_24 = new int[] { // Add 15 to these to get the pin number
         0, // 0
         1, // 1
         2, // 2

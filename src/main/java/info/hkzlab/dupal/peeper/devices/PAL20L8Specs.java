@@ -1,13 +1,8 @@
 package info.hkzlab.dupal.peeper.devices;
 
 public class PAL20L8Specs implements PALSpecs {
-
+    private static final String[] LABELS = { "i1", "i2", "i3", "i4", "i5", "i6", "i7", "i8", "i9", "i10", "i11", "GND", "i13", "i14", "o15", "io16", "io17", "io18", "io19", "io20", "io21", "o22", "i23", "VCC" };
     public static final String PAL_TYPE = "20L8";
-
-    private static final String[] LABELS_RO = { };
-    private static final String[] LABELS_IN =  {  "i1",  "i2",  "i3",  "i4",  "i5",  "i6",  "i7",  "i8",  "i9", "i10",   null,   null,   null,   null,   null,   null,   null,   null,  "i11",  "i13",  "i14",  "i23" };
-    private static final String[] LABELS_IO =  {  null,  null,  null,  null,  null,  null,  null,  null,  null,  null,   null, "io16", "io17", "io18", "io19", "io20", "io21",   null,   null,   null,   null,   null };
-    private static final String[] LABELS_O  = {   null,  null,  null,  null,  null,  null,  null,  null,  null,  null,  "o15",   null,   null,   null,   null,   null,   null,  "o22",   null,   null,   null,   null };
 
     @Override
     public String toString() {
@@ -65,26 +60,6 @@ public class PAL20L8Specs implements PALSpecs {
     }
 
     @Override
-    public String[] getLabels_RO() {
-        return LABELS_RO;
-    }
-
-    @Override
-    public String[] getLabels_O() {
-        return LABELS_O;
-    }
-
-    @Override
-    public String[] getLabels_IO() {
-        return LABELS_IO;
-    }
-
-    @Override
-    public String[] getLabels_IN() {
-        return LABELS_IN;
-    }
-
-    @Override
     public int getPinCount_IN() {
         return 14;
     }
@@ -112,5 +87,20 @@ public class PAL20L8Specs implements PALSpecs {
     @Override
     public int slotNumber() {
         return 1;
+    }
+
+    @Override
+    public int[] getWritePinNumbers() {
+        return PALSpecs.pal24_write_pin_numbers;
+    }
+
+    @Override
+    public int[] getReadPinNumbers() {
+        return PALSpecs.pal24_read_pin_numbers;
+    }
+
+    @Override
+    public String[] getLabels() {
+        return LABELS;
     }
 }

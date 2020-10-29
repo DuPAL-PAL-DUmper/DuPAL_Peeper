@@ -30,4 +30,8 @@ public class PinStatus {
    public void commitChange() {
        previousStatus = status;
    }
+
+   public String toString() {
+       return pinName;
+   }
 }

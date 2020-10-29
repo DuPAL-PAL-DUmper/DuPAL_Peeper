@@ -1,13 +1,8 @@
 package info.hkzlab.dupal.peeper.devices;
 
 public class PAL20R6Specs implements PALSpecs {
-
+    private static final String[] LABELS = { "CLK", "i2", "i3", "i4", "i5", "i6", "i7", "i8", "i9", "i10", "i11", "GND", "/OE", "i14", "io15", "ro16", "ro17", "ro18", "ro19", "ro20", "ro21", "io22", "i23", "VCC" };
     public static final String PAL_TYPE = "20R6";
-
-    private static final String[] LABELS_RO =  {  null,  null,  null,  null,  null,  null,  null,  null,  null, null,    null, "ro16", "ro17", "ro18", "ro19", "ro20", "ro21",   null,   null,   null,   null,   null };
-    private static final String[] LABELS_IN =  {  "i1",  "i2",  "i3",  "i4",  "i5",  "i6",  "i7",  "i8",  "i9", "i10",   null,   null,   null,   null,   null,   null,   null,   null,  "i11",  "i13",  "i14",  "i23" };
-    private static final String[] LABELS_IO =  {  null,  null,  null,  null,  null,  null,  null,  null,  null,  null, "io15",   null,   null,   null,   null,   null,   null, "io22",   null,   null,   null,   null };
-    private static final String[] LABELS_O  =  { };
 
     @Override
     public String toString() {
@@ -65,26 +60,6 @@ public class PAL20R6Specs implements PALSpecs {
     }
 
     @Override
-    public String[] getLabels_RO() {
-        return LABELS_RO;
-    }
-
-    @Override
-    public String[] getLabels_O() {
-        return LABELS_O;
-    }
-
-    @Override
-    public String[] getLabels_IO() {
-        return LABELS_IO;
-    }
-
-    @Override
-    public String[] getLabels_IN() {
-        return LABELS_IN;
-    }
-
-    @Override
     public int getPinCount_IN() {
         return 12;
     }
@@ -112,5 +87,20 @@ public class PAL20R6Specs implements PALSpecs {
     @Override
     public int slotNumber() {
         return 1;
+    }
+
+    @Override
+    public int[] getWritePinNumbers() {
+        return PALSpecs.pal24_write_pin_numbers;
+    }
+
+    @Override
+    public int[] getReadPinNumbers() {
+        return PALSpecs.pal24_read_pin_numbers;
+    }
+
+    @Override
+    public String[] getLabels() {
+        return LABELS;
     }
 }
