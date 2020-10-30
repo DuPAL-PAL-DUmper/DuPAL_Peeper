@@ -30,8 +30,8 @@ public class DumpPeephole implements Peephole {
     private Map<Integer, SimpleState> ssMap = null;
     
     /* Complex PALs */
-    private Map<OutStatePins, Set<RLink>> osRLMap = null;
-    private Map<OutStatePins, Set<OLink>> osOLMap = null;
+    private Map<OutStatePins, Map<Integer, RLink>> osRLMap = null;
+    private Map<OutStatePins, Map<Integer, OLink>> osOLMap = null;
 
     public DumpPeephole(JSONObject dumpRoot) {
         pSpecs = DumpParser.getPALType(dumpRoot);
@@ -39,10 +39,39 @@ public class DumpPeephole implements Peephole {
 
         if(pSpecs.getPinCount_IO() > 0 || pSpecs.getPinCount_RO() > 0) {
             logger.info("DumpPeephole -> Complex PAL");
-            
+
+            osRLMap = new HashMap<>();
+            osOLMap = new HashMap<>();
+
             simplePAL = false;
             RLink[] rlArray = DumpParser.extractRLinks(dumpRoot);
             OLink[] olArray = DumpParser.extractOLinks(dumpRoot);
+
+            // Build a map associating an OutState with simple Link connections
+            logger.info("DumpPeephole -> Buil a map for OLinks");
+            for(OLink ol : olArray) {
+                Map<Integer, OLink> olMap = osOLMap.get(ol.src);
+
+                if(olMap == null) {
+                    olMap = new HashMap<>();
+                    osOLMap.put(ol.src, olMap);
+                }
+
+                olMap.put(ol.inputs, ol);
+            }
+
+            // Build a similar map for registered links
+            logger.info("DumpPeephole -> Buil a map for RLinks");
+            for(RLink rl : rlArray) {
+                Map<Integer, RLink> rlMap = osRLMap.get(rl.src);
+                
+                if(rlMap == null) {
+                    rlMap = new HashMap<>();
+                    osRLMap.put(rl.src, rlMap);
+                }
+
+                rlMap.put(rl.inputs, rl);
+            }
         } else {
             logger.info("DumpPeephole -> Simple PAL");
 
