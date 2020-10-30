@@ -1,7 +1,7 @@
 package info.hkzlab.dupal.peeper.devices;
 
 public class PAL20L8Specs implements PALSpecs {
-    private static final String[] LABELS = { "i1", "i2", "i3", "i4", "i5", "i6", "i7", "i8", "i9", "i10", "i11", "GND", "i13", "i14", "o15", "io16", "io17", "io18", "io19", "io20", "io21", "o22", "i23", "VCC" };
+    private static final String[] LABELS = { "I 1", "I 2", "I 3", "I 4", "I 5", "I 6", "I 7", "I 8", "I 9", "I 10", "I 11", "GND", "I 13", "I 14", "O 15", "I/O 16", "I/O 17", "I/O 18", "I/O 19", "I/O 20", "I/O 21", "O 22", "I 23", "VCC" };
     public static final String PAL_TYPE = "20L8";
 
     @Override

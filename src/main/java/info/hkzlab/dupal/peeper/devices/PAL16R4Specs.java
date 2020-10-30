@@ -1,7 +1,7 @@
 package info.hkzlab.dupal.peeper.devices;
 
 public class PAL16R4Specs implements PALSpecs {
-    private static final String[] LABELS = { "CLK", "i2", "i3", "i4", "i5", "i6", "i7", "i8", "i9", "GND", "/OE", "io12", "io13", "ro14", "ro15", "ro16", "ro17", "io18", "io19", "VCC" };
+    private static final String[] LABELS = { "CLK", "I 2", "I 3", "I 4", "I 5", "I 6", "I 7", "I 8", "I 9", "GND", "/OE", "I/O 12", "I/O 13", "Q 14", "Q 15", "Q 16", "Q 17", "I/O 18", "I/O 19", "VCC" };
     public static final String PAL_TYPE = "16R4";
 
     @Override
