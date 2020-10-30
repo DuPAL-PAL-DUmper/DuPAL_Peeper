@@ -40,41 +40,47 @@ public class App extends Application {
 
     @Override
     public void init() throws Exception {
-        // Obtain PAL type
-        String palType = getParameters().getNamed().get("pal");
-        PALSpecs pspecs = null;
-        if(palType == null) {
-            printUsage();
-            System.exit(-1);
+        String jsonPath = getParameters().getNamed().get("json");
+
+        if(jsonPath == null) { // We'll work connected to the board
+            // Obtain PAL type
+            String palType = getParameters().getNamed().get("pal");
+            PALSpecs pspecs = null;
+            if(palType == null) {
+                printUsage();
+                System.exit(-1);
+            }
+
+            try {
+                Class<?> specsClass = Class.forName("info.hkzlab.dupal.peeper.devices.PAL" + palType.toUpperCase() + "Specs");
+                pspecs = (PALSpecs) specsClass.getConstructor().newInstance(new Object[] {});
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
+                    | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+                logger.error("Invalid PAL type selected.");
+                System.exit(-1);
+            }
+
+            // Obtain serial port
+            String serialPort = getParameters().getNamed().get("serial");
+            if(serialPort == null) {
+                printUsage();
+                System.exit(-1);
+            }
+
+            // Create the connection to the board
+            DuPALManager dpm = new DuPALManager(serialPort);
+            DuPALCmdInterface dpci = new DuPALCmdInterface(dpm, pspecs);
+
+            if (!dpm.enterRemoteMode()) {
+                logger.error("Unable to put DuPAL board in REMOTE MODE!");
+                System.exit(-1);
+            }
+
+            // Build the peephole
+            phole = new DuPALPeephole(dpci);
+        } else { // Initialize the simulated peephole
+
         }
-
-        try {
-            Class<?> specsClass = Class.forName("info.hkzlab.dupal.peeper.devices.PAL" + palType.toUpperCase() + "Specs");
-            pspecs = (PALSpecs) specsClass.getConstructor().newInstance(new Object[] {});
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-            logger.error("Invalid PAL type selected.");
-            System.exit(-1);
-        }
-
-        // Obtain serial port
-        String serialPort = getParameters().getNamed().get("serial");
-        if(serialPort == null) {
-            printUsage();
-            System.exit(-1);
-        }
-
-        // Create the connection to the board
-        DuPALManager dpm = new DuPALManager(serialPort);
-        DuPALCmdInterface dpci = new DuPALCmdInterface(dpm, pspecs);
-
-        if (!dpm.enterRemoteMode()) {
-            logger.error("Unable to put DuPAL board in REMOTE MODE!");
-            System.exit(-1);
-        }
-
-        // Build the peephole
-        phole = new DuPALPeephole(dpci);
     }
 
     @Override
@@ -105,6 +111,7 @@ public class App extends Application {
             }
 
             logger.error("peeper --serial=<serial_port> --pal=<pal_type>\n"
+                    + "peeper --json=/path/to/dump.json"
                     + "Where <pal_type> can be:\n" + supportedPALs.toString() + "\n");        
     }
 }
