@@ -1,5 +1,6 @@
 package info.hkzlab.dupal.peeper.controllers;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +18,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -73,6 +75,7 @@ public class PeeperInterfaceController {
         writeLabels = new ArrayList<>();
         readLabels = new ArrayList<>();
 
+        // Initialize grid constraints
         for (int idx = 0; idx < 3; idx++) {
             ColumnConstraints column = new ColumnConstraints();
             column.setPercentWidth(33.33);
@@ -88,15 +91,22 @@ public class PeeperInterfaceController {
             pinGrid.getRowConstraints().add(row);
         }
 
+        // Build the grid
         buildPinGrid(pSpecs, pinGrid, wrPins, rdPins, writeLabels, readLabels);
 
+        // Disable the clock button if CLK pin is not present
         if (pSpecs.getMask_CLK() == 0)
             writeClkButton.setDisable(true);
 
+        // Load the proper picture
+        loadDevicePicture(pSpecs, palModelPicture);
+
+        // Initialize the PINs
         writePinState(wrPins, false);
         readPinState(rdPins);
         updateLabels(writeLabels, readLabels, pinStatusMap);
 
+        // Set actions on buttons
         writeClrButton.setOnAction(event -> {
             for(PinStatus p : wrPins) p.clearChange();
             updateLabels(writeLabels, readLabels, pinStatusMap);
@@ -147,6 +157,15 @@ public class PeeperInterfaceController {
 
             l.setBackground(p.getState() ? rPinHIBackground : rPinLOBackground);
         }
+    }
+
+    private void loadDevicePicture(PALSpecs pSpecs, ImageView imgV) {
+        String imgName = pSpecs.getDeviceName()+".png";
+        URL imgRes = App.class.getResource("/graphics/"+imgName);
+
+        if(imgRes == null) imgRes = App.class.getResource("/graphics/unknown.png"); // Fall back to a generic image
+
+        imgV.setImage(new Image(imgRes.toString()));
     }
 
     private void writePinState(PinStatus[] pins, boolean clock) {

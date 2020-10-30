@@ -24,4 +24,6 @@ public interface PALSpecs {
     public int minimumBoardRev();
 
     public int slotNumber();
+
+    public String getDeviceName();
 }

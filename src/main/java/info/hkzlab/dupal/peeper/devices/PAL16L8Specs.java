@@ -68,4 +68,9 @@ public class PAL16L8Specs implements PALSpecs {
     public String[] getLabels() {
         return LABELS;
     }
+
+    @Override
+    public String getDeviceName() {
+        return PAL_TYPE;
+    }
 }
