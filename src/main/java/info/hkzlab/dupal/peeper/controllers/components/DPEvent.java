@@ -9,7 +9,7 @@ public class DPEvent {
         CLOCK
     }
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yy HH:mm:ss SS");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yy HH:mm:ss SSS");
 
     public final long timestamp;
     public final DPEventType type;
