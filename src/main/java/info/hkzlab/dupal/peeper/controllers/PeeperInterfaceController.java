@@ -33,6 +33,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
 public class PeeperInterfaceController {
+    @FXML private Label palLabel;
     @FXML private ImageView palModelPicture;
     @FXML private ListView<DPEvent> eventHistoryList;
     @FXML private GridPane pinGrid;
@@ -100,6 +101,7 @@ public class PeeperInterfaceController {
 
         // Load the proper picture
         loadDevicePicture(pSpecs, palModelPicture);
+        palLabel.setText(pSpecs.getDeviceName());
 
         // Initialize the PINs
         writePinState(wrPins, false);
@@ -166,6 +168,7 @@ public class PeeperInterfaceController {
         if(imgRes == null) imgRes = App.class.getResource("/graphics/unknown.png"); // Fall back to a generic image
 
         imgV.setImage(new Image(imgRes.toString()));
+        imgV.setPreserveRatio(true);
     }
 
     private void writePinState(PinStatus[] pins, boolean clock) {
