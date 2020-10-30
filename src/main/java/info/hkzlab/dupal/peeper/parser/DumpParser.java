@@ -11,8 +11,8 @@ import org.json.JSONObject;
 import info.hkzlab.dupal.peeper.devices.PALSpecs;
 import info.hkzlab.dupal.peeper.parser.states.*;
 
-public class ContentParser {
-    private ContentParser() {
+public class DumpParser {
+    private DumpParser() {
     };
 
     public static String extractPALName(JSONObject root) {
