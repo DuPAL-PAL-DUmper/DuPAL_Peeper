@@ -7,7 +7,7 @@ import org.slf4j.*;
 import info.hkzlab.dupal.peeper.board.boardio.*;
 import info.hkzlab.dupal.peeper.devices.*;
 import info.hkzlab.dupal.peeper.peephole.Peephole;
-import info.hkzlab.dupal.peeper.peephole.DuPALPeephole.DuPALPeephole;
+import info.hkzlab.dupal.peeper.peephole.DuPALPeephole;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
