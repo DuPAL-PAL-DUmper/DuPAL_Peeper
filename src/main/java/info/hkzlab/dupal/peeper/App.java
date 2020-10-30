@@ -1,13 +1,17 @@
 package info.hkzlab.dupal.peeper;
 
+import java.io.FileReader;
 import java.lang.reflect.InvocationTargetException;
 
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.slf4j.*;
 
 import info.hkzlab.dupal.peeper.board.boardio.*;
 import info.hkzlab.dupal.peeper.devices.*;
 import info.hkzlab.dupal.peeper.peephole.Peephole;
 import info.hkzlab.dupal.peeper.peephole.DuPALPeephole;
+import info.hkzlab.dupal.peeper.peephole.DumpPeephole;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -79,7 +83,14 @@ public class App extends Application {
             // Build the peephole
             phole = new DuPALPeephole(dpci);
         } else { // Initialize the simulated peephole
+            JSONObject root = new JSONObject(new JSONTokener(new FileReader(jsonPath)));
 
+            if(root == null) {
+                logger.error("Unable to read the PAL dump!");
+                System.exit(-1);
+            }
+
+            phole = new DumpPeephole(root);
         }
     }
 
