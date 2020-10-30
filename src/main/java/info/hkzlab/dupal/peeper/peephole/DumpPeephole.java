@@ -32,6 +32,7 @@ public class DumpPeephole implements Peephole {
     /* Complex PALs */
     private Map<OutStatePins, Map<Integer, RLink>> osRLMap = null;
     private Map<OutStatePins, Map<Integer, OLink>> osOLMap = null;
+    private OutStatePins curOS = null;
 
     public DumpPeephole(JSONObject dumpRoot) {
         pSpecs = DumpParser.getPALType(dumpRoot);
@@ -48,7 +49,7 @@ public class DumpPeephole implements Peephole {
             OLink[] olArray = DumpParser.extractOLinks(dumpRoot);
 
             // Build a map associating an OutState with simple Link connections
-            logger.info("DumpPeephole -> Buil a map for OLinks");
+            logger.info("DumpPeephole -> Build a map for OLinks");
             for(OLink ol : olArray) {
                 Map<Integer, OLink> olMap = osOLMap.get(ol.src);
 
@@ -61,7 +62,7 @@ public class DumpPeephole implements Peephole {
             }
 
             // Build a similar map for registered links
-            logger.info("DumpPeephole -> Buil a map for RLinks");
+            logger.info("DumpPeephole -> Build a map for RLinks");
             for(RLink rl : rlArray) {
                 Map<Integer, RLink> rlMap = osRLMap.get(rl.src);
                 
@@ -72,6 +73,9 @@ public class DumpPeephole implements Peephole {
 
                 rlMap.put(rl.inputs, rl);
             }
+
+            // Initialize the start state
+            curOS = (olArray.length > 0) ? olArray[0].src : rlArray[0].src;
         } else {
             logger.info("DumpPeephole -> Simple PAL");
 
