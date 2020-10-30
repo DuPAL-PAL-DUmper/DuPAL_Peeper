@@ -25,41 +25,6 @@ public class PAL20R4Specs implements PALSpecs {
     }
 
     @Override
-    public int getMask_IN() {
-        return 0x3403FE;
-    }
-
-    @Override
-    public int getMask_IO_R() {
-        return 0xC3;
-    }
-
-    @Override
-    public int getMask_IO_W() {
-        return 0x030C00;
-    }
-
-    @Override
-    public int getMask_RO_R() {
-        return 0x3C;
-    }
-
-    @Override
-    public int getMask_RO_W() {
-        return 0xF000;
-    }
-
-    @Override
-    public int getMask_O_R() {
-        return 0x00;
-    }
-
-    @Override
-    public int getMask_O_W() {
-        return 0x00;
-    }
-
-    @Override
     public int getPinCount_IN() {
         return 12;
     }

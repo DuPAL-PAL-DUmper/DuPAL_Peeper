@@ -78,18 +78,5 @@ public class DuPALCmdInterface {
             logger.error("Pulsing clock to insert data " + String.format("%06X", data) + " failed.");
             throw e;
         }
-
-    }
-
-    public int build_WData(int in, int io, boolean clk, boolean oe) {
-        int data = 0;
-
-        data |= BitUtils.scatterBitField(in, palSpecs.getMask_IN());
-        data |= BitUtils.scatterBitField(io, palSpecs.getMask_IO_W());
-
-        if(clk) data |= BitUtils.scatterBitField(1, palSpecs.getMask_CLK());
-        if(oe) data |= BitUtils.scatterBitField(1, palSpecs.getMask_OE());
-
-        return data;
     }
 }
