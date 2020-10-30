@@ -40,6 +40,11 @@ public class PinStatus {
         wasModified = false;
     }
 
+    public void clearChange() {
+        wasModified = false;
+        state = previousState;
+    }
+
     public String toString() {
         return pinName;
     }
