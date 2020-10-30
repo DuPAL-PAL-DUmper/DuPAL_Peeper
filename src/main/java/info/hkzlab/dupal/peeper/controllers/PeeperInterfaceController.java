@@ -30,6 +30,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
 public class PeeperInterfaceController {
@@ -54,9 +55,10 @@ public class PeeperInterfaceController {
     private static final Border changedBorder = new Border(new BorderStroke(Color.rgb(200, 0, 0, 0.8), BorderStrokeStyle.DOTTED, new CornerRadii(5.0), BorderStroke.THIN));
     private static final Background wPinHIBackground = new Background(new BackgroundFill(colorWPinHI, new CornerRadii(5.0), new Insets(3.0)));
     private static final Background wPinLOBackground = new Background(new BackgroundFill(colorWPinLO, new CornerRadii(5.0), new Insets(3.0)));
-    private static final Background rPinHIBackground = new Background(new BackgroundFill(colorRPinHI, new CornerRadii(5.0), new Insets(3.0)));
-    private static final Background rPinLOBackground = new Background(new BackgroundFill(colorRPinLO, new CornerRadii(5.0), new Insets(3.0)));
+    private static final Background rPinHIBackground = new Background(new BackgroundFill(colorRPinHI, new CornerRadii(5.0), new Insets(5.0)));
+    private static final Background rPinLOBackground = new Background(new BackgroundFill(colorRPinLO, new CornerRadii(5.0), new Insets(5.0)));
     
+    private static final Font pinLabelFont = new Font("System Bold", 12);
 
     private PinStatus[] wrPins;
     private PinStatus[] rdPins;
@@ -220,6 +222,7 @@ public class PeeperInterfaceController {
             pinLabel.setMaxHeight(Double.MAX_VALUE);
             pinLabel.setMaxWidth(Double.MAX_VALUE);
             pinLabel.setBackground(wPinLOBackground);
+            pinLabel.setFont(pinLabelFont);
 
             String id = "W"+p.pinNumber;
             
