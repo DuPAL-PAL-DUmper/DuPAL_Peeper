@@ -7,6 +7,7 @@ public class PinStatus {
 
     private boolean state = false;
     private boolean previousState = false;
+    private boolean wasModified = false;
 
     public PinStatus(int pinNumber, int index, String pinName) {
             this.pinNumber = pinNumber;
@@ -14,8 +15,15 @@ public class PinStatus {
             this.index = index;
     }
 
-    public void setStatus(boolean state) {
-        previousState = this.state;
+    public void setState(boolean state) {
+        if(!wasModified) {
+            previousState = this.state;
+            wasModified = true;
+        } else if (state == previousState) {
+            this.state = state;
+            wasModified = false;
+        }
+
         this.state = state;
     }
 
@@ -24,11 +32,12 @@ public class PinStatus {
     }
 
     public boolean wasModified() {
-        return state != previousState;
+        return wasModified;
     }
 
     public void commitChange() {
         previousState = state;
+        wasModified = false;
     }
 
     public String toString() {
