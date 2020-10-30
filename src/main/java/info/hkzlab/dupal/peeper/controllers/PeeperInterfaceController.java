@@ -22,7 +22,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
@@ -47,8 +46,8 @@ public class PeeperInterfaceController {
     @FXML
     private Button readButton;
 
-    private static final Color colorRPinHI = Color.rgb(0, 200, 0, 0.4);
-    private static final Color colorRPinLO = Color.rgb(200, 0, 0, 0.4);
+    private static final Color colorRPinHI = Color.rgb(0, 200, 0, 0.2);
+    private static final Color colorRPinLO = Color.rgb(200, 0, 0, 0.2);
 
     private static final Color colorWPinHI = Color.rgb(0, 190, 0, 0.7);
     private static final Color colorWPinLO = Color.rgb(200, 0, 0, 0.7);
@@ -100,12 +99,29 @@ public class PeeperInterfaceController {
         if (pSpecs.getMask_CLK() == 0)
             writeClkButton.setDisable(true);
 
-        writePinState(wrPins);
+        writePinState(wrPins, false);
         readPinState(rdPins);
         updateLabels(writeLabels, readLabels, pinStatusMap);
 
         writeClrButton.setOnAction(event -> {
             for(PinStatus p : wrPins) p.clearChange();
+            updateLabels(writeLabels, readLabels, pinStatusMap);
+        });
+
+        readButton.setOnAction(event -> {
+            readPinState(rdPins);
+            updateLabels(writeLabels, readLabels, pinStatusMap);
+        });
+
+        writeSetButton.setOnAction(event -> {
+            writePinState(wrPins, false);
+            readPinState(rdPins);
+            updateLabels(writeLabels, readLabels, pinStatusMap);
+        });
+
+        writeClkButton.setOnAction(event -> {
+            writePinState(wrPins, true);
+            readPinState(rdPins);
             updateLabels(writeLabels, readLabels, pinStatusMap);
         });
     }
@@ -127,7 +143,7 @@ public class PeeperInterfaceController {
         }
     }
 
-    private void writePinState(PinStatus[] pins) {
+    private void writePinState(PinStatus[] pins, boolean clock) {
         boolean[] pstate = new boolean[pins.length];
         for (int idx = 0; idx < pins.length; idx++) {
             pstate[idx] = pins[idx].getState();
@@ -135,7 +151,8 @@ public class PeeperInterfaceController {
         }
 
         try {
-            App.phole.write(pstate);
+            if(clock) App.phole.clock(pstate);
+            else App.phole.write(pstate);
         } catch (PeepholeException e) {
             e.printStackTrace();
             Platform.exit();
