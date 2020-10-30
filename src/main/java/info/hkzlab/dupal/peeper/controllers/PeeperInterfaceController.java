@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import info.hkzlab.dupal.peeper.App;
+import info.hkzlab.dupal.peeper.controllers.components.DPEvent;
 import info.hkzlab.dupal.peeper.controllers.components.PinStatus;
+import info.hkzlab.dupal.peeper.controllers.components.DPEvent.DPEventType;
 import info.hkzlab.dupal.peeper.devices.PALSpecs;
 import info.hkzlab.dupal.peeper.exceptions.PeepholeException;
 import javafx.application.Platform;
@@ -16,7 +18,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
@@ -30,28 +31,21 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
 public class PeeperInterfaceController {
-    @FXML
-    private ImageView palModelPicture;
-    @FXML
-    private ListView<String> eventHistoryList;
-    @FXML
-    private GridPane pinGrid;
+    @FXML private ImageView palModelPicture;
+    @FXML private ListView<DPEvent> eventHistoryList;
+    @FXML private GridPane pinGrid;
 
-    @FXML
-    private Button writeClrButton;
-    @FXML
-    private Button writeClkButton;
-    @FXML
-    private Button writeSetButton;
-    @FXML
-    private Button readButton;
+    @FXML private Button writeClrButton;
+    @FXML private Button writeClkButton;
+    @FXML private Button writeSetButton;
+    @FXML private Button readButton;
+
+    private static final int MAX_HISTORY_BUFFER = 500;
 
     private static final Color colorRPinHI = Color.rgb(0, 200, 0, 0.2);
     private static final Color colorRPinLO = Color.rgb(200, 0, 0, 0.2);
-
     private static final Color colorWPinHI = Color.rgb(0, 190, 0, 0.7);
     private static final Color colorWPinLO = Color.rgb(200, 0, 0, 0.7);
-
     private static final Color colorWPinINACTIVE = Color.rgb(180, 180, 180, 0.5);
 
     private static final Border changedBorder = new Border(new BorderStroke(Color.rgb(200, 0, 0, 0.8), BorderStrokeStyle.DOTTED, new CornerRadii(5.0), BorderStroke.THIN));
@@ -117,12 +111,24 @@ public class PeeperInterfaceController {
             writePinState(wrPins, false);
             readPinState(rdPins);
             updateLabels(writeLabels, readLabels, pinStatusMap);
+
+            DPEvent dpEvent = new DPEvent(DPEventType.SET, wrPins, rdPins);
+            eventHistoryList.getItems().add(dpEvent);
+            if (eventHistoryList.getItems().size() > MAX_HISTORY_BUFFER) eventHistoryList.getItems().remove(0);
+
+            eventHistoryList.scrollTo(dpEvent);
         });
 
         writeClkButton.setOnAction(event -> {
             writePinState(wrPins, true);
             readPinState(rdPins);
             updateLabels(writeLabels, readLabels, pinStatusMap);
+
+            DPEvent dpEvent = new DPEvent(DPEventType.CLOCK, wrPins, rdPins);
+            eventHistoryList.getItems().add(dpEvent);
+            if (eventHistoryList.getItems().size() > MAX_HISTORY_BUFFER) eventHistoryList.getItems().remove(0);
+            
+            eventHistoryList.scrollTo(dpEvent);
         });
     }
 

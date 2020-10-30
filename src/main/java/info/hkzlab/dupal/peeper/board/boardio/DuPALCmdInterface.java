@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import info.hkzlab.dupal.peeper.board.dupalproto.DuPALProto;
 import info.hkzlab.dupal.peeper.devices.PALSpecs;
 import info.hkzlab.dupal.peeper.exceptions.DuPALBoardException;
-import info.hkzlab.dupal.peeper.utilities.BitUtils;
 
 public class DuPALCmdInterface {
     private static final Logger logger = LoggerFactory.getLogger(DuPALCmdInterface.class);

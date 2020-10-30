@@ -20,10 +20,11 @@ public class DuPALPeephole implements Peephole {
         this.dpci = dpci;
         is24Pins = dpci.palSpecs.getPinCount_IN() > 10;
 
-        dpci.setLED(DuPALCmdInterface.DuPAL_LED.P20_LED, false);
-        dpci.setLED(DuPALCmdInterface.DuPAL_LED.P24_LED, false);
-
-        dpci.setLED(is24Pins ? DuPALCmdInterface.DuPAL_LED.P24_LED : DuPALCmdInterface.DuPAL_LED.P20_LED, true);
+        if(dpci.getBoardVersion() >= 2) {
+            dpci.setLED(DuPALCmdInterface.DuPAL_LED.P20_LED, false);
+            dpci.setLED(DuPALCmdInterface.DuPAL_LED.P24_LED, false);
+            dpci.setLED(is24Pins ? DuPALCmdInterface.DuPAL_LED.P24_LED : DuPALCmdInterface.DuPAL_LED.P20_LED, true);
+        }
 
         logger.info("DuPALPeephole -> Instantiating for device " + dpci.palSpecs + ", 24 pins? " + is24Pins);
     }
