@@ -123,13 +123,27 @@ public class DumpPeephole implements Peephole {
             return BitUtils.build_ReadPinsArrayFromMask(ss.outputs.out | hiz_forced, is24Pins);
         } else {
             boolean oe_disabled = (lastWrite & pSpecs.getMask_OE()) != 0;
+            int out = curOS.out;
+
+            logger.info("read() -> Complex PAL. /OE? " + oe_disabled);
+
+            // If /OE is not enabled (low), overwrite the Q outputs with what we're setting in the inputs
+            if(oe_disabled) {
+                out &= ~(pSpecs.getMask_RO() >> DumpParser.MASK_SHIFT);
+                out |= (lastWrite & pSpecs.getMask_RO()) >> DumpParser.MASK_SHIFT;
+            }
+
+            // Clear the pins that are HI-Z, shouldn't be necessary, but let's make sure
+            out &= ~curOS.hiz;
+
+            // Clear the IO pins that are actually inputs
+            out &= ~(IOasOUTMask >> DumpParser.MASK_SHIFT);
 
             // Registered Outputs can be toggled off by the /OE pin, so make sure of its status (if present) and fake the outputs as hi-z
             int hiz_forced = (lastWrite >> DumpParser.MASK_SHIFT) & curOS.hiz;
-            hiz_forced |= ((oe_disabled ? (lastWrite & pSpecs.getMask_RO()) >> DumpParser.MASK_SHIFT : 0) & 0xFF);
-            int IO_as_IN = (lastWrite & pSpecs.getMask_IO() & ~IOasOUTMask) >> DumpParser.MASK_SHIFT;
+            int IOasIN = ((lastWrite & pSpecs.getMask_IO()) & ~IOasOUTMask) >> DumpParser.MASK_SHIFT;
 
-            return BitUtils.build_ReadPinsArrayFromMask(curOS.out | hiz_forced | IO_as_IN, is24Pins);
+            return BitUtils.build_ReadPinsArrayFromMask(out | hiz_forced | IOasIN, is24Pins);
         }
     }
 
@@ -162,6 +176,11 @@ public class DumpPeephole implements Peephole {
     @Override
     public PALSpecs getSpecs() {
         return pSpecs;
+    }
+
+    @Override
+    public String getDeviceName() {
+        return pSpecs.getDeviceName() + " (SIM)" ;
     }
     
 }

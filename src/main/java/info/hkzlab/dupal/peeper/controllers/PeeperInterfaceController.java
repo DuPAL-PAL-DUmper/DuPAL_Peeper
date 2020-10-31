@@ -103,7 +103,7 @@ public class PeeperInterfaceController {
 
         // Load the proper picture
         loadDevicePicture(pSpecs, palModelPicture);
-        palLabel.setText(pSpecs.getDeviceName());
+        palLabel.setText(App.phole.getDeviceName());
 
         // Initialize the PINs
         writePinState(wrPins, false);

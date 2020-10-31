@@ -11,4 +11,6 @@ public interface Peephole {
     public void close();
 
     public PALSpecs getSpecs();
+
+    public String getDeviceName();
 }

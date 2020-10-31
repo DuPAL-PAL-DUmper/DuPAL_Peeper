@@ -77,4 +77,9 @@ public class DuPALPeephole implements Peephole {
     public PALSpecs getSpecs() {
         return dpci.palSpecs;
     }
+
+    @Override
+    public String getDeviceName() {
+        return dpci.palSpecs.getDeviceName();
+    }
 }
