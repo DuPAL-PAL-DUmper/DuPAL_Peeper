@@ -25,6 +25,26 @@ public class PAL12H6Specs implements PALSpecs {
     }
 
     @Override
+    public int getMask_IN() {
+        return 0x0303FF;
+    }
+
+    @Override
+    public int getMask_IO() {
+        return 0x00;
+    }
+
+    @Override
+    public int getMask_RO() {
+        return 0x00;
+    }    
+
+    @Override
+    public int getMask_O() {
+        return 0xFC00;
+    }
+
+    @Override
     public int getPinCount_IN() {
         return 12;
     }

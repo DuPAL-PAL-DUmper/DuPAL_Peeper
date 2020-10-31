@@ -16,6 +16,10 @@ public interface PALSpecs {
 
     public int getMask_CLK();
     public int getMask_OE();
+    public int getMask_IN();
+    public int getMask_IO();
+    public int getMask_RO();
+    public int getMask_O();
 
     public String[] getLabels();
 

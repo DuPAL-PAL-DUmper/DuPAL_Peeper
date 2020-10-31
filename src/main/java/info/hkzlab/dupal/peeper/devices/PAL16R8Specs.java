@@ -25,6 +25,26 @@ public class PAL16R8Specs implements PALSpecs {
     }
 
     @Override
+    public int getMask_IN() {
+        return 0x1FE;
+    }
+
+    @Override
+    public int getMask_IO() {
+        return 0x00;
+    }
+
+    @Override
+    public int getMask_RO() {
+        return 0x03FC00;
+    }
+
+    @Override
+    public int getMask_O() {
+        return 0x00;
+    }
+
+    @Override
     public int getPinCount_IN() {
         return 8;
     }
