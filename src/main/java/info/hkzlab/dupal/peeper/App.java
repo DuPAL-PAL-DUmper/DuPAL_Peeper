@@ -93,7 +93,7 @@ public class App extends Application {
         primaryStage.setTitle(AppName + " " + version);
         primaryStage.setResizable(false);
         primaryStage.setHeight(620);
-        primaryStage.setWidth(800);
+        primaryStage.setWidth(600);
 
         SplitPane box = FXMLLoader.load(App.class.getResource("/ui/peeperui.fxml"));
         Scene scene = new Scene(box);

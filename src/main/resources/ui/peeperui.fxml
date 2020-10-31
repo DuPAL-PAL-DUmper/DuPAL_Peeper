@@ -15,23 +15,23 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.5659025787965616" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="info.hkzlab.dupal.peeper.controllers.PeeperInterfaceController">
+<SplitPane dividerPositions="0.3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="info.hkzlab.dupal.peeper.controllers.PeeperInterfaceController">
   <items>
     <AnchorPane minHeight="0.0">
          <children>
-            <SplitPane dividerPositions="0.5" layoutX="137.0" layoutY="120.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <SplitPane dividerPositions="0.5" layoutX="137.0" layoutY="120.0" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0">
                      <children>
-                        <VBox alignment="TOP_CENTER" layoutX="157.0" layoutY="-2.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox alignment="TOP_CENTER" layoutX="157.0" layoutY="-2.0" prefHeight="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <Label fx:id="palLabel" alignment="CENTER" contentDisplay="CENTER" text="Label" VBox.vgrow="NEVER">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Label>
-                              <Separator prefWidth="200.0" />
-                              <ImageView id="palTypeImage" fx:id="palModelPicture" fitHeight="220.0" fitWidth="459.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+                              <Separator />
+                              <ImageView id="palTypeImage" fx:id="palModelPicture" fitHeight="220.0" fitWidth="250.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                                  <VBox.margin>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </VBox.margin></ImageView>
@@ -41,9 +41,9 @@
                   </AnchorPane>
                 <AnchorPane maxHeight="300.0" minHeight="300.0" minWidth="0.0" prefHeight="300.0" SplitPane.resizableWithParent="false">
                      <children>
-                        <VBox alignment="BOTTOM_CENTER" layoutX="157.0" layoutY="-2.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox alignment="BOTTOM_CENTER" layoutX="157.0" layoutY="-2.0" prefHeight="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <ListView id="eventHistoryList" fx:id="eventHistoryList" prefWidth="460.0" VBox.vgrow="ALWAYS" />
+                              <ListView id="eventHistoryList" fx:id="eventHistoryList" VBox.vgrow="ALWAYS" />
                            </children>
                         </VBox>
                      </children>
