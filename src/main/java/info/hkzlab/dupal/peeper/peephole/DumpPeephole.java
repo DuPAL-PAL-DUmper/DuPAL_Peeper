@@ -137,7 +137,7 @@ public class DumpPeephole implements Peephole {
             out &= ~curOS.hiz;
 
             // Clear the IO pins that are actually inputs
-            out &= ((IOasOUTMask | pSpecs.getMask_RO() | pSpecs.getMask_O()) >> DumpParser.MASK_SHIFT) & 0xFF;//~((IOasOUTMask >> DumpParser.MASK_SHIFT) & 0xFF);
+            out &= ((IOasOUTMask | pSpecs.getMask_RO() | pSpecs.getMask_O()) >> DumpParser.MASK_SHIFT) & 0xFF;
 
             // Registered Outputs can be toggled off by the /OE pin, so make sure of its status (if present) and fake the outputs as hi-z
             int hiz_forced = (lastWrite >> DumpParser.MASK_SHIFT) & curOS.hiz;
