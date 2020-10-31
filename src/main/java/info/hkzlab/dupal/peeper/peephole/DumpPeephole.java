@@ -94,7 +94,7 @@ public class DumpPeephole implements Peephole {
     public void write(boolean[] pins) throws PeepholeException {
         int data = BitUtils.build_WriteMaskFromPins(pins);
         lastWrite = data;
-        data &= ~(IOasOUTMask | pSpecs.getMask_O() | pSpecs.getMask_RO()); // Clean the written data from output pins
+        data &= ~(IOasOUTMask | pSpecs.getMask_O() | pSpecs.getMask_RO() | pSpecs.getMask_CLK() | pSpecs.getMask_OE()); // Clean the written data from output pins
 
         if(!simplePAL) {
             // Check if this is actually a clock pulse
@@ -131,8 +131,13 @@ public class DumpPeephole implements Peephole {
     public void clock(boolean[] pins) throws PeepholeException {
         int data = BitUtils.build_WriteMaskFromPins(pins);
         lastWrite = data;
-        data &= ~(IOasOUTMask | pSpecs.getMask_O() | pSpecs.getMask_RO()); // Clean the written data from output pins
+        data &= ~(IOasOUTMask | pSpecs.getMask_O() | pSpecs.getMask_RO() | pSpecs.getMask_CLK() | pSpecs.getMask_OE()); // Clean the written data from output pins
 
+        if(simplePAL) throw new PeepholeException("Clock command on a PAL that does not support it!");
+
+        Map<Integer,RLink> rlMap = osRLMap.get(curOS);
+        RLink rl = rlMap.get(Integer.valueOf(data));
+        curOS = rl.dst;
     }
 
     @Override
