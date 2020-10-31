@@ -47,6 +47,7 @@ public class DumpPeephole implements Peephole {
             simplePAL = false;
             RLink[] rlArray = DumpParser.extractRLinks(dumpRoot);
             OLink[] olArray = DumpParser.extractOLinks(dumpRoot);
+            int IOasOUTMask = DumpParser.extractIOasOutMask(dumpRoot);
 
             // Build a map associating an OutState with simple Link connections
             logger.info("DumpPeephole -> Build a map for OLinks");
