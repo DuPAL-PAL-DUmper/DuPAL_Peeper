@@ -110,16 +110,18 @@ public class DumpPeephole implements Peephole {
     @Override
     public boolean[] read() throws PeepholeException {
         if(simplePAL) {
-            int wrIdx = lastWrite & ~(IOasOUTMask | pSpecs.getMask_O() | pSpecs.getMask_RO());
+            int wrIdx = lastWrite & ~(IOasOUTMask | pSpecs.getMask_O() | pSpecs.getMask_RO() | pSpecs.getMask_OE() | pSpecs.getMask_CLK());
             SimpleState ss = ssMap.get(Integer.valueOf(wrIdx));
-            int readVal = ss.outputs.out;
             int hiz_forced = (lastWrite >> DumpParser.MASK_SHIFT) & ss.outputs.hiz;
-            readVal |= hiz_forced;
 
-            return BitUtils.build_ReadPinsArrayFromMask(readVal, is24Pins);
+            return BitUtils.build_ReadPinsArrayFromMask(ss.outputs.out | hiz_forced, is24Pins);
+        } else {
+            boolean oe_disabled = (lastWrite & pSpecs.getMask_OE()) != 0;
+            int hiz_forced = (lastWrite >> DumpParser.MASK_SHIFT) & curOS.hiz;
+            hiz_forced |= ((oe_disabled ? (lastWrite & pSpecs.getMask_RO()) >> DumpParser.MASK_SHIFT : 0) & 0xFF);
+
+            return BitUtils.build_ReadPinsArrayFromMask(curOS.out | hiz_forced, is24Pins);
         }
-
-        return null;
     }
 
     @Override
