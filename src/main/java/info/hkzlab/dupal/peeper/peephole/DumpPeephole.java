@@ -125,7 +125,7 @@ public class DumpPeephole implements Peephole {
             boolean oe_disabled = (lastWrite & pSpecs.getMask_OE()) != 0;
             int out = curOS.out;
 
-            logger.info("read() -> Complex PAL. /OE? " + oe_disabled);
+            logger.info("read() -> Complex PAL. /OE? " + oe_disabled + " raw out:" + String.format("%02X", out) + " hiz:" + String.format("%02X", curOS.hiz));
 
             // If /OE is not enabled (low), overwrite the Q outputs with what we're setting in the inputs
             if(oe_disabled) {
@@ -137,7 +137,7 @@ public class DumpPeephole implements Peephole {
             out &= ~curOS.hiz;
 
             // Clear the IO pins that are actually inputs
-            out &= ~(IOasOUTMask >> DumpParser.MASK_SHIFT);
+            out &= ((IOasOUTMask | pSpecs.getMask_RO() | pSpecs.getMask_O()) >> DumpParser.MASK_SHIFT) & 0xFF;//~((IOasOUTMask >> DumpParser.MASK_SHIFT) & 0xFF);
 
             // Registered Outputs can be toggled off by the /OE pin, so make sure of its status (if present) and fake the outputs as hi-z
             int hiz_forced = (lastWrite >> DumpParser.MASK_SHIFT) & curOS.hiz;
