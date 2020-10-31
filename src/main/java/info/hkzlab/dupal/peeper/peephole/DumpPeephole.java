@@ -33,6 +33,7 @@ public class DumpPeephole implements Peephole {
     private Map<OutStatePins, Map<Integer, RLink>> osRLMap = null;
     private Map<OutStatePins, Map<Integer, OLink>> osOLMap = null;
     private OutStatePins curOS = null;
+    private int IOasOUTMask = 0;
 
     public DumpPeephole(JSONObject dumpRoot) {
         pSpecs = DumpParser.getPALType(dumpRoot);
@@ -47,7 +48,7 @@ public class DumpPeephole implements Peephole {
             simplePAL = false;
             RLink[] rlArray = DumpParser.extractRLinks(dumpRoot);
             OLink[] olArray = DumpParser.extractOLinks(dumpRoot);
-            int IOasOUTMask = DumpParser.extractIOasOutMask(dumpRoot);
+            IOasOUTMask = DumpParser.extractIOasOutMask(dumpRoot);
 
             // Build a map associating an OutState with simple Link connections
             logger.info("DumpPeephole -> Build a map for OLinks");
