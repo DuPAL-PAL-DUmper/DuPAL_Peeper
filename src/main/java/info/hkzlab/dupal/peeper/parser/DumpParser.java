@@ -12,7 +12,7 @@ import info.hkzlab.dupal.peeper.devices.PALSpecs;
 import info.hkzlab.dupal.peeper.parser.states.*;
 
 public class DumpParser {
-    public static final int MASK_SHIFT = 13;
+    public static final int MASK_SHIFT = 10;
 
     private DumpParser() {
     };

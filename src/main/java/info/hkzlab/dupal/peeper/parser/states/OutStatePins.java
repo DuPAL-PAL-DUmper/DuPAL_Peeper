@@ -34,6 +34,6 @@ public class OutStatePins {
     }
 
     public String toString() {
-        return "OutStatePins-["+out+"|"+hiz+"]";
+        return "OutStatePins-["+String.format("%02X", out)+"|"+String.format("%02X", hiz)+"]";
     }
 }

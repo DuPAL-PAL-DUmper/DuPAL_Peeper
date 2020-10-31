@@ -105,10 +105,10 @@ public class DumpPeephole implements Peephole {
             if((data & pSpecs.getMask_CLK()) != 0) clock(pins);
             else {
                 data &= ~(pSpecs.getMask_CLK());
-                logger.info("write() -> " + String.format("%06X", data) + " current OS: " + curOS.toString());
                 Map<Integer,OLink> olMap = osOLMap.get(curOS);
                 OLink ol = olMap.get(Integer.valueOf(data));
                 curOS = ol.dst;
+                logger.info("write() -> " + String.format("%06X", data) + " new OS: " + curOS.toString());
             }
         }
     }
@@ -144,6 +144,8 @@ public class DumpPeephole implements Peephole {
         Map<Integer,RLink> rlMap = osRLMap.get(curOS);
         RLink rl = rlMap.get(Integer.valueOf(data));
         curOS = rl.dst;
+        
+        logger.info("clock() -> " + String.format("%06X", data) + " new OS: " + curOS.toString());
     }
 
     @Override
