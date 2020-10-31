@@ -117,10 +117,13 @@ public class DumpPeephole implements Peephole {
             return BitUtils.build_ReadPinsArrayFromMask(ss.outputs.out | hiz_forced, is24Pins);
         } else {
             boolean oe_disabled = (lastWrite & pSpecs.getMask_OE()) != 0;
+
+            // Registered Outputs can be toggled off by the /OE pin, so make sure of its status (if present) and fake the outputs as hi-z
             int hiz_forced = (lastWrite >> DumpParser.MASK_SHIFT) & curOS.hiz;
             hiz_forced |= ((oe_disabled ? (lastWrite & pSpecs.getMask_RO()) >> DumpParser.MASK_SHIFT : 0) & 0xFF);
+            int IO_as_IN = (lastWrite & pSpecs.getMask_IO() & ~IOasOUTMask) >> DumpParser.MASK_SHIFT;
 
-            return BitUtils.build_ReadPinsArrayFromMask(curOS.out | hiz_forced, is24Pins);
+            return BitUtils.build_ReadPinsArrayFromMask(curOS.out | hiz_forced | IO_as_IN, is24Pins);
         }
     }
 
