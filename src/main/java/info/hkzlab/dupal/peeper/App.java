@@ -84,12 +84,6 @@ public class App extends Application {
             phole = new DuPALPeephole(dpci);
         } else { // Initialize the simulated peephole
             JSONObject root = new JSONObject(new JSONTokener(new FileReader(jsonPath)));
-
-            if(root == null) {
-                logger.error("Unable to read the PAL dump!");
-                System.exit(-1);
-            }
-
             phole = new DumpPeephole(root);
         }
     }
