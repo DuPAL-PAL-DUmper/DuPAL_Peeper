@@ -64,7 +64,7 @@ public class DuPALPeephole implements Peephole {
         if (bv < dpci.palSpecs.minimumBoardRev())
             throw new PeepholeException("This IC is not supported by this board type");
 
-        return false;
+        return true;
     }
 
     @Override

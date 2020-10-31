@@ -12,7 +12,7 @@ import info.hkzlab.dupal.peeper.devices.PALSpecs;
 import info.hkzlab.dupal.peeper.parser.states.*;
 
 public class DumpParser {
-    private static final int IOasOUT_MASK_SHIFT = 13;
+    public static final int MASK_SHIFT = 13;
 
     private DumpParser() {
     };
@@ -40,7 +40,7 @@ public class DumpParser {
     public static int extractIOasOutMask(JSONObject root) {
         if(!root.getJSONObject("header").getJSONObject("PAL").has("IOsAsOUT")) return 0;
 
-        return root.getJSONObject("header").getJSONObject("PAL").getInt("IOsAsOUT") << IOasOUT_MASK_SHIFT;
+        return root.getJSONObject("header").getJSONObject("PAL").getInt("IOsAsOUT") << MASK_SHIFT;
     }
 
     public static SimpleState[] extractSimpleStates(JSONObject root) {
