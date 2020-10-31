@@ -32,4 +32,8 @@ public class OutStatePins {
         return (this.hiz == ((OutStatePins)o).hiz) &&
                (this.out == ((OutStatePins)o).out);
     }
+
+    public String toString() {
+        return "OutStatePins-["+out+"|"+hiz+"]";
+    }
 }

@@ -27,7 +27,7 @@ public class DumpParser {
 
         Class<?> specsClass;
         try {
-            specsClass = Class.forName("info.hkzlab.dupal.peeper.devices.PAL" + palName.toUpperCase() + "Specs");
+            specsClass = Class.forName("info.hkzlab.dupal.peeper.devices." + palName.toUpperCase() + "Specs");
             pspecs = (PALSpecs) specsClass.getConstructor().newInstance(new Object[] {});
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
                 | InvocationTargetException | NoSuchMethodException | SecurityException e) {

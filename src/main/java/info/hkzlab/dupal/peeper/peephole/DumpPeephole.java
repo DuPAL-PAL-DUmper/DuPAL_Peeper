@@ -26,14 +26,17 @@ public class DumpPeephole implements Peephole {
 
     /* Simple PALs */
     private Map<Integer, SimpleState> ssMap = null;
-    
+
     /* Complex PALs */
     private Map<OutStatePins, Map<Integer, RLink>> osRLMap = null;
     private Map<OutStatePins, Map<Integer, OLink>> osOLMap = null;
     private OutStatePins curOS = null;
 
-    public DumpPeephole(JSONObject dumpRoot) {
+    public DumpPeephole(JSONObject dumpRoot) throws PeepholeException {
         pSpecs = DumpParser.getPALType(dumpRoot);
+
+        if(pSpecs == null) throw new PeepholeException("Unable to extract PAL type from dump.");
+
         is24Pins = pSpecs.getPinCount_IN() > 10;
 
         if(pSpecs.getPinCount_IO() > 0 || pSpecs.getPinCount_RO() > 0) {
@@ -46,6 +49,7 @@ public class DumpPeephole implements Peephole {
             RLink[] rlArray = DumpParser.extractRLinks(dumpRoot);
             OLink[] olArray = DumpParser.extractOLinks(dumpRoot);
             IOasOUTMask = DumpParser.extractIOasOutMask(dumpRoot);
+            logger.info("DumpPeephole -> IO as Outputs: " + String.format("%06X", IOasOUTMask));
 
             // Build a map associating an OutState with simple Link connections
             logger.info("DumpPeephole -> Build a map for OLinks");
@@ -94,12 +98,14 @@ public class DumpPeephole implements Peephole {
     public void write(boolean[] pins) throws PeepholeException {
         int data = BitUtils.build_WriteMaskFromPins(pins);
         lastWrite = data;
-        data &= ~(IOasOUTMask | pSpecs.getMask_O() | pSpecs.getMask_RO() | pSpecs.getMask_CLK() | pSpecs.getMask_OE()); // Clean the written data from output pins
+        data &= ~(IOasOUTMask | pSpecs.getMask_O() | pSpecs.getMask_RO() | pSpecs.getMask_OE()); // Clean the written data from output pins
 
         if(!simplePAL) {
             // Check if this is actually a clock pulse
             if((data & pSpecs.getMask_CLK()) != 0) clock(pins);
             else {
+                data &= ~(pSpecs.getMask_CLK());
+                logger.info("write() -> " + String.format("%06X", data) + " current OS: " + curOS.toString());
                 Map<Integer,OLink> olMap = osOLMap.get(curOS);
                 OLink ol = olMap.get(Integer.valueOf(data));
                 curOS = ol.dst;
