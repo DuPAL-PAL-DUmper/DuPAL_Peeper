@@ -97,7 +97,13 @@ public class DumpPeephole implements Peephole {
         data &= ~(IOasOUTMask | pSpecs.getMask_O() | pSpecs.getMask_RO()); // Clean the written data from output pins
 
         if(!simplePAL) {
-            // TODO
+            // Check if this is actually a clock pulse
+            if((data & pSpecs.getMask_CLK()) != 0) clock(pins);
+            else {
+                Map<Integer,OLink> olMap = osOLMap.get(curOS);
+                OLink ol = olMap.get(Integer.valueOf(data));
+                curOS = ol.dst;
+            }
         }
     }
 
