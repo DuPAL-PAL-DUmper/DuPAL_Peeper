@@ -44,9 +44,9 @@ public class App extends Application {
 
     @Override
     public void init() throws Exception {
-        String jsonPath = getParameters().getNamed().get("json");
+        String dumpPath = getParameters().getNamed().get("dump");
 
-        if(jsonPath == null) { // We'll work connected to the board
+        if(dumpPath == null) { // We'll work connected to the board
             // Obtain PAL type
             String palType = getParameters().getNamed().get("pal");
             PALSpecs pspecs = null;
@@ -83,7 +83,7 @@ public class App extends Application {
             // Build the peephole
             phole = new DuPALPeephole(dpci);
         } else { // Initialize the simulated peephole
-            JSONObject root = new JSONObject(new JSONTokener(new FileReader(jsonPath)));
+            JSONObject root = new JSONObject(new JSONTokener(new FileReader(dumpPath)));
             phole = new DumpPeephole(root);
         }
     }
@@ -116,7 +116,7 @@ public class App extends Application {
             }
 
             logger.error("peeper --serial=<serial_port> --pal=<pal_type>\n"
-                    + "peeper --json=/path/to/dump.json"
+                    + "peeper --dump=/path/to/dump.json"
                     + "Where <pal_type> can be:\n" + supportedPALs.toString() + "\n");        
     }
 }
