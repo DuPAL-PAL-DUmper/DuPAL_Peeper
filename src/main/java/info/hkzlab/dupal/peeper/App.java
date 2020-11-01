@@ -115,8 +115,8 @@ public class App extends Application {
                 supportedPALs.append("\t" + palT + "\n");
             }
 
-            logger.error("peeper --serial=<serial_port> --pal=<pal_type>\n"
-                    + "peeper --dump=/path/to/dump.json"
+            System.out.println("peeper --serial=<serial_port> --pal=<pal_type>\n"
+                    + "peeper --dump=/path/to/dump.json\n\n"
                     + "Where <pal_type> can be:\n" + supportedPALs.toString() + "\n");        
     }
 }
