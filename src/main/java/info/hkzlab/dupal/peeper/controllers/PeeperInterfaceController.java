@@ -138,7 +138,7 @@ public class PeeperInterfaceController {
             readPinState(rdPins);
             updateLabels(writeLabels, readLabels, pinStatusMap);
 
-            DPEvent dpEvent = new DPEvent(DPEventType.CLOCK, wrPins, rdPins);
+            DPEvent dpEvent = new DPEvent(DPEventType.CLK, wrPins, rdPins);
             eventHistoryList.getItems().add(dpEvent);
             if (eventHistoryList.getItems().size() > MAX_HISTORY_BUFFER) eventHistoryList.getItems().remove(0);
             

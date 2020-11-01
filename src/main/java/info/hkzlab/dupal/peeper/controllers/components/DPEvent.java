@@ -6,7 +6,7 @@ import java.util.Date;
 public class DPEvent {
     public enum DPEventType {
         SET,
-        CLOCK
+        CLK
     }
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yy HH:mm:ss SSS");
