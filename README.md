@@ -33,16 +33,16 @@ java -jar peeper.jar --dump="E:\test\dump.json"
 
 The interface is divided into 3 main sections:
 
-- Top left: a graphical representation of the pinout of the chip under analysis and its type. A **SIM** tag will appear if simulation mode is being used.
-- Bottom left: historical log of the pin changes tested on the IC.
-- Right: a graphical representation of the state of the pins. On the first two columns, the user can set how a pin is driven by the tool, on the rightmost column the actual state as read from the device is shown.
+- **Top left**: a graphical representation of the pinout of the chip under analysis and its type. A **SIM** tag will appear if simulation mode is being used.
+- **Bottom left**: historical log of the pin changes tested on the IC.
+- **Right**: a graphical representation of the state of the pins. On the first two columns, the user can set how a pin is driven by the tool, on the rightmost column the actual state as read from the device is shown.
 
 The buttons at the bottom are:
 
-- Set: Once a pin changes are selected on the first two columns, set will commit these changes to the devices and actually change how pins are driven (output pins are driven through resistors, to avoid a short circuit and detect Hi-Z pins).
-- Clock: Same as above, but will also toggle the CLK pin automatically. Will be disabled if the PAL doesn't have a CLK pin.
-- Clear: If changes to pin state are selected but not committed, this will clear them and restore the previous committed state.
-- Read: Read the output state again. This is usually not needed as a read is performed automatically after any change to the state, but it can be useful to spot pins that are flipping or with an unstable state.
+- **Set**: Once a pin changes are selected on the first two columns, set will commit these changes to the devices and actually change how pins are driven (output pins are driven through resistors, to avoid a short circuit and detect Hi-Z pins).
+- **Clock**: Same as above, but will also toggle the CLK pin automatically. Will be disabled if the PAL doesn't have a CLK pin.
+- **Clear**: If changes to pin state are selected but not committed, this will clear them and restore the previous committed state.
+- **Read**: Read the output state again. This is usually not needed as a read is performed automatically after any change to the state, but it can be useful to spot pins that are flipping or with an unstable state.
 
 ## Known Issues
 
