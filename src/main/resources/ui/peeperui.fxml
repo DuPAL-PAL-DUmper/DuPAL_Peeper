@@ -51,7 +51,7 @@
               </items>
             </SplitPane>
          </children></AnchorPane>
-    <AnchorPane maxWidth="230.0" minHeight="0.0" minWidth="230.0" prefHeight="160.0" prefWidth="230.0">
+    <AnchorPane maxWidth="280.0" minHeight="0.0" minWidth="280.0" prefHeight="160.0" prefWidth="280.0">
          <children>
             <SplitPane dividerPositions="0.9" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <items>
