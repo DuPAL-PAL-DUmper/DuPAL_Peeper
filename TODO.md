@@ -1,5 +1,5 @@
 # TODO List
 
-- JavaFX support
-- Support JSON files as input to simulate a PAL
-- Build generic translation layer from pin set/read commands to DuPAL / JSON
+- Some kind of configuration for font size?
+- Better testing for SIM mode
+- More unit tests?
