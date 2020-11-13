@@ -88,7 +88,7 @@ public class DumpPeephole implements Peephole {
             }
             
             if(curOS == null) curOS = (olArray.length > 0) ? olArray[0].src : rlArray[0].src;
-            logger.info("Starting from state " + curOS.json_hash);
+            logger.info("Starting from state " + curOS.dump_hash);
         } else {
             // We will ignore the starting state selection here, as it makes no sense for this type of PAL
             logger.info("DumpPeephole -> Simple PAL");
@@ -118,7 +118,7 @@ public class DumpPeephole implements Peephole {
                 Map<Integer,OLink> olMap = osOLMap.get(curOS);
                 OLink ol = olMap.get(Integer.valueOf(data));
                 curOS = ol.dst;
-                logger.info("write() -> " + String.format("%06X", data) + " new OS: " + curOS.toString() + " JSON_hash: " + curOS.json_hash);
+                logger.info("write() -> " + String.format("%06X", data) + " new OS: " + curOS.toString() + " dump_hash: " + curOS.dump_hash);
             }
         }
     }
@@ -135,7 +135,7 @@ public class DumpPeephole implements Peephole {
             boolean oe_disabled = (lastWrite & pSpecs.getMask_OE()) != 0;
             int out = curOS.out;
 
-            logger.info("read() -> Complex PAL. /OE? " + oe_disabled + " raw out:" + String.format("%02X", out) + " hiz:" + String.format("%02X", curOS.hiz) + " JSON_hash: "+ curOS.json_hash);
+            logger.info("read() -> Complex PAL. /OE? " + oe_disabled + " raw out:" + String.format("%02X", out) + " hiz:" + String.format("%02X", curOS.hiz) + " dump_hash: "+ curOS.dump_hash);
 
             // If /OE is not enabled (low), overwrite the Q outputs with what we're setting in the inputs
             if(oe_disabled) {
