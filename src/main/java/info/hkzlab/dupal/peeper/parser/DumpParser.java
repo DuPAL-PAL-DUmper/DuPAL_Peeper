@@ -2,6 +2,7 @@ package info.hkzlab.dupal.peeper.parser;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,19 +58,25 @@ public class DumpParser {
         return ssList.toArray(new SimpleState[ssList.size()]);
     }
 
-    public static OLink[] extractOLinks(JSONObject root) {
-        ArrayList<OLink> olList = new ArrayList<>();
-
+    public static Map<Integer, OutStatePins> extractStateMap(JSONObject root) {
         if(!root.has("states")) return null;
-        if(!root.has("oLinks")) return null;
-        JSONArray olArray = root.getJSONArray("oLinks");
+        
         JSONArray states = root.getJSONArray("states");
-
         Map<Integer, OutStatePins> stateMap = new HashMap<>();
         for(int idx = 0; idx < states.length(); idx++) {
             JSONObject jstate = states.getJSONObject(idx);
-            stateMap.put(Integer.valueOf(jstate.getInt("hash")), new OutStatePins(jstate.getInt("out"), jstate.getInt("hiz")));
+            int hash = jstate.getInt("hash");
+            stateMap.put(Integer.valueOf(hash), new OutStatePins(jstate.getInt("out"), jstate.getInt("hiz"), hash));
         }
+
+        return Collections.unmodifiableMap(stateMap);
+    }
+
+    public static OLink[] extractOLinks(JSONObject root, Map<Integer, OutStatePins> stateMap) {
+        ArrayList<OLink> olList = new ArrayList<>();
+
+        if(!root.has("oLinks")) return null;
+        JSONArray olArray = root.getJSONArray("oLinks");
 
         for(int idx = 0; idx < olArray.length(); idx++) {
             JSONObject ol = olArray.getJSONObject(idx);
@@ -82,19 +89,11 @@ public class DumpParser {
         return olList.toArray(new OLink[olList.size()]);
     }
 
-    public static RLink[] extractRLinks(JSONObject root) {
+    public static RLink[] extractRLinks(JSONObject root, Map<Integer, OutStatePins> stateMap) {
         ArrayList<RLink> rlList = new ArrayList<>();
 
         if(!root.has("rLinks")) return null;
-        if(!root.has("states")) return null;
-        JSONArray states = root.getJSONArray("states");
         JSONArray rlArray = root.getJSONArray("rLinks");
-
-        Map<Integer, OutStatePins> stateMap = new HashMap<>();
-        for(int idx = 0; idx < states.length(); idx++) {
-            JSONObject jstate = states.getJSONObject(idx);
-            stateMap.put(Integer.valueOf(jstate.getInt("hash")), new OutStatePins(jstate.getInt("out"), jstate.getInt("hiz")));
-        }
 
         for(int idx = 0; idx < rlArray.length(); idx++) {
             JSONObject rl = rlArray.getJSONObject(idx);

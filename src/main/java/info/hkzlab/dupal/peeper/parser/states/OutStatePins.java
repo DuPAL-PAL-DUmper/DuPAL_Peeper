@@ -3,10 +3,16 @@ package info.hkzlab.dupal.peeper.parser.states;
 public class OutStatePins {
     public final int out;
     public final int hiz;
+    public final int json_hash; // The hashcode this state had in the JSON, for selection purposes
 
     public OutStatePins(int out, int hiz) {
+        this(out, hiz, 0);
+    }
+
+    public OutStatePins(int out, int hiz, int json_hash) {
         this.out = out;
         this.hiz = hiz;
+        this.json_hash = json_hash;
     }
 
     

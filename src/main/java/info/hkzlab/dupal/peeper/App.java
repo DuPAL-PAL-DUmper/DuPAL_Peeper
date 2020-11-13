@@ -83,8 +83,19 @@ public class App extends Application {
             // Build the peephole
             phole = new DuPALPeephole(dpci);
         } else { // Initialize the simulated peephole
+            String hashParm = getParameters().getNamed().get("hash");
+            Integer startStateHash = null;
+
+            if(hashParm != null) {
+                try { startStateHash = Integer.valueOf(hashParm); }
+                catch (NumberFormatException e) { // Not a valid number, apparently
+                    logger.error("Hash specified in the wrong format!");
+                    startStateHash = null;
+                }
+            }
+
             JSONObject root = new JSONObject(new JSONTokener(new FileReader(dumpPath)));
-            phole = new DumpPeephole(root);
+            phole = new DumpPeephole(root, startStateHash);
         }
     }
 
@@ -116,7 +127,7 @@ public class App extends Application {
             }
 
             System.out.println("peeper --serial=<serial_port> --pal=<pal_type>\n"
-                    + "peeper --dump=/path/to/dump.json\n\n"
+                    + "peeper --dump=/path/to/dump.json [--hash=id]\n\n"
                     + "Where <pal_type> can be:\n" + supportedPALs.toString() + "\n");        
     }
 }
