@@ -26,7 +26,7 @@ java -jar peeper.jar --serial=com5 --pal=16L8
 **Simulation** mode:
 
 ```sh
-java -jar peeper.jar --dump="E:\test\dump.json"
+java -jar peeper.jar --dump="E:\test\dump.json" [--hash=start_state]
 ```
 
 ### Interface
