@@ -22,12 +22,14 @@ public class App extends Application {
     public static volatile String[] palTypes = {
             // Simple devices
             PAL10L8Specs.PAL_TYPE, PAL12H6Specs.PAL_TYPE,
+            PAL12L6Specs.PAL_TYPE,
 
             // Asynchronous outputs
             PAL16L8Specs.PAL_TYPE, PAL20L8Specs.PAL_TYPE,
 
             // Registered devices
-            PAL16R4Specs.PAL_TYPE, PAL16R6Specs.PAL_TYPE, PAL16R8Specs.PAL_TYPE, PAL20R4Specs.PAL_TYPE,
+            PAL16R4Specs.PAL_TYPE, PAL16R6Specs.PAL_TYPE, 
+            PAL16R8Specs.PAL_TYPE, PAL20R4Specs.PAL_TYPE,
             PAL20R6Specs.PAL_TYPE, PAL20R8Specs.PAL_TYPE };
 
     private final static Logger logger = LoggerFactory.getLogger(App.class);
