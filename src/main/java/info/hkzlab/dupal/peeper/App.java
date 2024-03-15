@@ -2,6 +2,7 @@ package info.hkzlab.dupal.peeper;
 
 import java.io.FileReader;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -38,6 +39,7 @@ public class App extends Application {
     private final static String AppName = "DuPAL Peeper";
 
     public static Peephole phole = null;
+    public static boolean hiz_mode = false;
 
     public static void main(String[] args) throws Exception {
         logger.info(AppName + " " + version);
@@ -47,6 +49,9 @@ public class App extends Application {
     @Override
     public void init() throws Exception {
         String dumpPath = getParameters().getNamed().get("dump");
+
+        List<String> unnamedParams = getParameters().getUnnamed();
+        hiz_mode = unnamedParams.contains("-hiz") ? true : false; 
 
         if(dumpPath == null) { // We'll work connected to the board
             // Obtain PAL type
@@ -88,6 +93,8 @@ public class App extends Application {
             JSONObject root = new JSONObject(new JSONTokener(new FileReader(dumpPath)));
             phole = new DumpPeephole(root);
         }
+
+        logger.info("Hi-Z mode? " + hiz_mode);
     }
 
     @Override
@@ -117,8 +124,8 @@ public class App extends Application {
                 supportedPALs.append("\t" + palT + "\n");
             }
 
-            System.out.println("peeper --serial=<serial_port> --pal=<pal_type>\n"
-                    + "peeper --dump=/path/to/dump.json\n\n"
+            System.out.println("peeper --serial=<serial_port> --pal=<pal_type> [-hiz]\n"
+                    + "peeper --dump=/path/to/dump.json [-hiz]\n\n"
                     + "Where <pal_type> can be:\n" + supportedPALs.toString() + "\n");        
     }
 }
