@@ -48,6 +48,7 @@ public class PeeperInterfaceController {
 
     private static final Color colorRPinHI = Color.rgb(0, 200, 0, 0.2);
     private static final Color colorRPinLO = Color.rgb(200, 0, 0, 0.2);
+    private static final Color colorRPinHIZ = Color.rgb(200, 200, 0, 0.2);
     private static final Color colorWPinHI = Color.rgb(0, 190, 0, 0.7);
     private static final Color colorWPinLO = Color.rgb(200, 0, 0, 0.7);
     private static final Color colorWPinINACTIVE = Color.rgb(180, 180, 180, 0.5);
@@ -57,6 +58,7 @@ public class PeeperInterfaceController {
     private static final Background wPinLOBackground = new Background(new BackgroundFill(colorWPinLO, new CornerRadii(5.0), new Insets(3.0)));
     private static final Background rPinHIBackground = new Background(new BackgroundFill(colorRPinHI, new CornerRadii(5.0), new Insets(5.0)));
     private static final Background rPinLOBackground = new Background(new BackgroundFill(colorRPinLO, new CornerRadii(5.0), new Insets(5.0)));
+    private static final Background rPinHIZBackground = new Background(new BackgroundFill(colorRPinHIZ, new CornerRadii(5.0), new Insets(5.0)));
     
     private static final Font pinLabelFont = new Font("System Bold", 12);
 
@@ -159,7 +161,7 @@ public class PeeperInterfaceController {
             String id = l.getId();
             PinStatus p = pMap.get(id);
 
-            l.setBackground(p.getState() ? rPinHIBackground : rPinLOBackground);
+            l.setBackground(p.getHIZ() ? rPinHIZBackground : (p.getState() ? rPinHIBackground : rPinLOBackground));
         }
     }
 
