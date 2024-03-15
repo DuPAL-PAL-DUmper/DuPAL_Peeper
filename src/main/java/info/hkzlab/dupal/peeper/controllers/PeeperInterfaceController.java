@@ -2,8 +2,12 @@ package info.hkzlab.dupal.peeper.controllers;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import info.hkzlab.dupal.peeper.App;
 import info.hkzlab.dupal.peeper.controllers.components.DPEvent;
@@ -49,7 +53,7 @@ public class PeeperInterfaceController {
 
     private static final Color colorRPinHI = Color.rgb(0, 200, 0, 0.2);
     private static final Color colorRPinLO = Color.rgb(200, 0, 0, 0.2);
-    private static final Color colorRPinHIZ = Color.rgb(200, 200, 0, 0.2);
+    private static final Color colorRPinHIZ = Color.rgb(200, 200, 0, 0.5);
     private static final Color colorWPinHI = Color.rgb(0, 190, 0, 0.7);
     private static final Color colorWPinLO = Color.rgb(200, 0, 0, 0.7);
     private static final Color colorWPinINACTIVE = Color.rgb(180, 180, 180, 0.5);
@@ -63,21 +67,23 @@ public class PeeperInterfaceController {
     
     private static final Font pinLabelFont = new Font("System Bold", 12);
 
-    private PinStatus[] wrPins;
-    private PinStatus[] rdPins;
-    private PinStatus[] hizCheckPins;
+    private PinStatus[] wrPins, rdPins;
+    private PinStatus[] wrHiZCheckPins, rdHiZCheckPins;
     
     private ArrayList<Label> writeLabels;
     private ArrayList<Label> readLabels;
 
     private Map<String, PinStatus> pinStatusMap;
 
+    private final static Logger logger = LoggerFactory.getLogger(PeeperInterfaceController.class);
+
     public void initialize() {
         PALSpecs pSpecs = App.phole.getSpecs();
         pinStatusMap = new HashMap<>();
         wrPins = buildWritePinList(pSpecs);
         rdPins = buildReadPinList(pSpecs);
-        hizCheckPins = buildHiZCheckPinList(pSpecs);
+        wrHiZCheckPins = extractHiZCheckPinList(pSpecs, wrPins);
+        rdHiZCheckPins = extractHiZCheckPinList(pSpecs, rdPins);
         pinGrid.getColumnConstraints().clear();
 
         writeLabels = new ArrayList<>();
@@ -111,8 +117,7 @@ public class PeeperInterfaceController {
         palLabel.setText(App.phole.getDeviceName());
 
         // Initialize the PINs
-        writePinState(wrPins, false);
-        readPinState(rdPins);
+        updateAndCheckPinState(App.hiz_mode, wrPins, rdPins, wrHiZCheckPins, rdHiZCheckPins, false);
         updateLabels(writeLabels, readLabels, pinStatusMap);
 
         // Set actions on buttons
@@ -122,13 +127,24 @@ public class PeeperInterfaceController {
         });
 
         readButton.setOnAction(event -> {
+            boolean[] hiz_state = new boolean[rdPins.length];
+            // Save the hiz_state
+            for(int idx = 0; idx < hiz_state.length; idx++) {
+                hiz_state[idx] = rdPins[idx].getHIZ();
+            }
+
             readPinState(rdPins);
+
+            // Restore the hiz_state
+            for(int idx = 0; idx < hiz_state.length; idx++) {
+                rdPins[idx].setHIZ(hiz_state[idx]);
+            }
+
             updateLabels(writeLabels, readLabels, pinStatusMap);
         });
 
         writeSetButton.setOnAction(event -> {
-            writePinState(wrPins, false);
-            readPinState(rdPins);
+            updateAndCheckPinState(App.hiz_mode, wrPins, rdPins, wrHiZCheckPins, rdHiZCheckPins, false);
             updateLabels(writeLabels, readLabels, pinStatusMap);
 
             DPEvent dpEvent = new DPEvent(DPEventType.SET, wrPins, rdPins);
@@ -139,8 +155,7 @@ public class PeeperInterfaceController {
         });
 
         writeClkButton.setOnAction(event -> {
-            writePinState(wrPins, true);
-            readPinState(rdPins);
+            updateAndCheckPinState(App.hiz_mode, wrPins, rdPins, wrHiZCheckPins, rdHiZCheckPins, true);
             updateLabels(writeLabels, readLabels, pinStatusMap);
 
             DPEvent dpEvent = new DPEvent(DPEventType.CLK, wrPins, rdPins);
@@ -149,6 +164,46 @@ public class PeeperInterfaceController {
             
             eventHistoryList.scrollTo(dpEvent);
         });
+    }
+
+    private void updateAndCheckPinState(boolean checkHiZ, PinStatus[] wrPins, PinStatus[] rdPins, PinStatus[] wrHiZCheckPins, PinStatus[] rdHiZCheckPins, boolean clock) {
+        assert(wrHiZCheckPins.length == rdHiZCheckPins.length);
+            
+        writePinState(wrPins, clock);
+        readPinState(rdPins);
+
+        if (checkHiZ) {
+            logger.info("Checking for HiZ pins, we have " + wrHiZCheckPins.length + " candidates...");
+
+            boolean[] cur_pin_state = new boolean[wrHiZCheckPins.length];
+            boolean[] hiz_pin_state = new boolean[wrHiZCheckPins.length];
+                
+            for(int idx = 0; idx < cur_pin_state.length; idx++) {
+                cur_pin_state[idx] = rdHiZCheckPins[idx].getState();
+                wrHiZCheckPins[idx].setState(!wrHiZCheckPins[idx].getState()); // Invert the state on the writing pin
+            }
+                
+            // Flip the pins that we need to check for HiZ
+            writePinState(wrPins, false);
+            readPinState(rdPins);
+
+            for(int idx = 0; idx < cur_pin_state.length; idx++) {
+                if(rdHiZCheckPins[idx].getState() != cur_pin_state[idx]) { // We found a pin that followed our output state change
+                    hiz_pin_state[idx] = true;
+                    logger.info("Found pin \"" + rdHiZCheckPins[idx].pinName + "\" that has value \"" + rdHiZCheckPins[idx].getState() + "\"");
+                }
+                wrHiZCheckPins[idx].setState(!wrHiZCheckPins[idx].getState()); // Restore the original state
+            }
+
+            // Restore the original write state
+            writePinState(wrPins, false);
+            readPinState(rdPins);
+
+            // Mark read pins as HiZ
+            for(int idx = 0; idx < hiz_pin_state.length; idx++) {
+                rdHiZCheckPins[idx].setHIZ(hiz_pin_state[idx]);   
+            }  
+        }
     }
 
     private void updateLabels(ArrayList<Label> wLabels, ArrayList<Label> rLabels, Map<String, PinStatus> pMap) {
@@ -310,16 +365,24 @@ public class PeeperInterfaceController {
         return array;
     }
 
-    static private PinStatus[] buildHiZCheckPinList(PALSpecs pSpecs) {
+    static private PinStatus[] extractHiZCheckPinList(PALSpecs pSpecs, PinStatus[] pins) {
         int oMask = pSpecs.getMask_O();
         boolean is24Pins = pSpecs.getPinCount_IN() > 10;
-        int[] pins = BitUtils.build_PinNumberListFromWriteMask(oMask, is24Pins);
-        String[] labels = pSpecs.getLabels();
+        int[] hzpins = BitUtils.build_PinNumberListFromWriteMask(oMask, is24Pins);
+        int pinCount = 0;
+        PinStatus[] array = new PinStatus[hzpins.length];
 
-        PinStatus[] array = new PinStatus[pins.length];
-        for(int idx = 0; idx < array.length; idx++) {
-            array[idx] = new PinStatus(pins[idx], idx, labels[pins[idx]-1]);
+        for(int idx = 0; idx < pins.length && pinCount < hzpins.length; idx++) {
+            for(int hiz_idx = 0; hiz_idx < hzpins.length; hiz_idx++) {
+                if(pins[idx].pinNumber == hzpins[hiz_idx]) {
+                    array[pinCount++] = pins[idx];
+                    break;
+                }
+            }
         }
+
+        // Make sure the pins are always in order
+        Arrays.sort(array);
 
         return array;
     }

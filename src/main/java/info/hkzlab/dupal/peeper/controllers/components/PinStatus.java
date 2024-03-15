@@ -1,6 +1,6 @@
 package info.hkzlab.dupal.peeper.controllers.components;
 
-public class PinStatus {
+public class PinStatus implements Comparable<PinStatus> {
     public final int pinNumber;
     public final int index;
     public final String pinName;
@@ -58,5 +58,10 @@ public class PinStatus {
 
     public String toString() {
         return pinName;
+    }
+
+    @Override
+    public int compareTo(PinStatus o) {
+        return this.pinNumber - o.pinNumber;
     }
 }
