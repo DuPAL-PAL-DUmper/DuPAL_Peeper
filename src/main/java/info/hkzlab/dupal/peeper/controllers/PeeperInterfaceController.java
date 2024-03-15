@@ -11,6 +11,7 @@ import info.hkzlab.dupal.peeper.controllers.components.PinStatus;
 import info.hkzlab.dupal.peeper.controllers.components.DPEvent.DPEventType;
 import info.hkzlab.dupal.peeper.devices.PALSpecs;
 import info.hkzlab.dupal.peeper.exceptions.PeepholeException;
+import info.hkzlab.dupal.peeper.utilities.BitUtils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -64,6 +65,7 @@ public class PeeperInterfaceController {
 
     private PinStatus[] wrPins;
     private PinStatus[] rdPins;
+    private PinStatus[] hizCheckPins;
     
     private ArrayList<Label> writeLabels;
     private ArrayList<Label> readLabels;
@@ -75,6 +77,7 @@ public class PeeperInterfaceController {
         pinStatusMap = new HashMap<>();
         wrPins = buildWritePinList(pSpecs);
         rdPins = buildReadPinList(pSpecs);
+        hizCheckPins = buildHiZCheckPinList(pSpecs);
         pinGrid.getColumnConstraints().clear();
 
         writeLabels = new ArrayList<>();
@@ -302,6 +305,20 @@ public class PeeperInterfaceController {
 
         for(int idx = 0; idx < array.length; idx++) {
             array[idx] = new PinStatus(rPin[idx], idx, labels[rPin[idx]-1]);
+        }
+
+        return array;
+    }
+
+    static private PinStatus[] buildHiZCheckPinList(PALSpecs pSpecs) {
+        int oMask = pSpecs.getMask_O();
+        boolean is24Pins = pSpecs.getPinCount_IN() > 10;
+        int[] pins = BitUtils.build_PinNumberListFromWriteMask(oMask, is24Pins);
+        String[] labels = pSpecs.getLabels();
+
+        PinStatus[] array = new PinStatus[pins.length];
+        for(int idx = 0; idx < array.length; idx++) {
+            array[idx] = new PinStatus(pins[idx], idx, labels[pins[idx]-1]);
         }
 
         return array;

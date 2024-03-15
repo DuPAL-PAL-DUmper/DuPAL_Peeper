@@ -1,6 +1,8 @@
 package info.hkzlab.dupal.peeper.utilities;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BitUtils {
     // The following array will map an entry in an ordered list (1-to-20) of pins to the correct shift in the DuPAL write command
@@ -23,6 +25,27 @@ public class BitUtils {
        11, // 17
        10, // 18
        16  // 19
+    };
+
+    private static final int[] d2h_write_20 = new int[] { // DuPAL-to-human conversion map for writing commands (20 pin devices)
+        1, // 0
+        2, // 1
+        3, // 2
+        4, // 3
+        5, // 4
+        6, // 5
+        7, // 6
+        8, // 7
+        9, // 8
+        11, // 9
+        18, // 10
+        17, // 11
+        16, // 12
+        15, // 13
+        14, // 14
+        13, // 15
+        19, // 16
+        12 // 17
     }; 
 
     private static final int[] h2d_write_24 = new int[] { // human-to-DuPAL conversion map for writing commands (24 pin devices)
@@ -50,6 +73,31 @@ public class BitUtils {
        21  // 23
     };
 
+    private static final int[] d2h_write_24 = new int[] { // DuPAL-to-human conversion map for writing commands (24 pin devices)
+        1, // 0
+        2, // 1
+        3, // 2
+        4, // 3
+        5, // 4
+        6, // 5
+        7, // 6
+        8, // 7
+        9, // 8
+        10, // 9
+        15, // 10
+        16, // 11
+        17, // 12
+        18, // 13
+        19, // 14
+        20, // 15
+        21, // 16
+        22, // 17
+        11, // 18
+        13, // 19
+        14, // 20
+        23 // 21
+    };
+
     private static final int[] d2h_read_20 = new int[] { // Add 12 to these to get the pin number
         7, // 0
         5, // 1
@@ -73,6 +121,23 @@ public class BitUtils {
     };
 
     private BitUtils() {};
+
+    static public int[] build_PinNumberListFromWriteMask(int mask, boolean pal24) {
+        int[] map;
+        List<Integer> pin_numbers = new ArrayList<Integer>();
+
+        if(pal24) map = d2h_write_24;
+        else map = d2h_write_20;
+
+        // Warning: this assumes that the mask is at most 32bit wide
+        for(int shft = 0; shft < 32; shft++) {
+            if(((mask >> shft) & 1) == 1) {
+                pin_numbers.add(map[shft]);
+            }
+        }
+
+        return pin_numbers.stream().mapToInt(Integer::intValue).toArray();
+    }
 
     static public int build_WriteMaskFromPins(boolean[] pins) {
         int mask = 0;
