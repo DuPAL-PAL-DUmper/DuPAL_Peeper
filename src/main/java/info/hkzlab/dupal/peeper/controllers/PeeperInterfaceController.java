@@ -175,29 +175,31 @@ public class PeeperInterfaceController {
         if (checkHiZ) {
             logger.info("Checking for HiZ pins, we have " + wrHiZCheckPins.length + " candidates...");
 
-            boolean[] cur_pin_state = new boolean[wrHiZCheckPins.length];
             boolean[] hiz_pin_state = new boolean[wrHiZCheckPins.length];
                 
-            for(int idx = 0; idx < cur_pin_state.length; idx++) {
-                cur_pin_state[idx] = rdHiZCheckPins[idx].getState();
-                wrHiZCheckPins[idx].setState(!wrHiZCheckPins[idx].getState()); // Invert the state on the writing pin
-            }
-                
-            // Flip the pins that we need to check for HiZ
-            writePinState(wrPins, false);
-            readPinState(rdPins);
-
-            for(int idx = 0; idx < cur_pin_state.length; idx++) {
-                if(rdHiZCheckPins[idx].getState() != cur_pin_state[idx]) { // We found a pin that followed our output state change
-                    hiz_pin_state[idx] = true;
-                    logger.info("Found pin \"" + rdHiZCheckPins[idx].pinName + "\" that has value \"" + rdHiZCheckPins[idx].getState() + "\"");
+            for(int idx = 0; idx < wrHiZCheckPins.length; idx++) {
+                // This is not Hi-Z, we can skip it
+                if(rdHiZCheckPins[idx].getState() != wrHiZCheckPins[idx].getState()) {
+                    hiz_pin_state[idx] = false;
+                    continue; // Next one, please
                 }
-                wrHiZCheckPins[idx].setState(!wrHiZCheckPins[idx].getState()); // Restore the original state
-            }
 
-            // Restore the original write state
-            writePinState(wrPins, false);
-            readPinState(rdPins);
+                wrHiZCheckPins[idx].setState(!wrHiZCheckPins[idx].getState()); // Invert the state on the writing pin
+                writePinState(wrPins, false); // And read the state
+                readPinState(rdPins);
+
+                // Check that the pin followed our write, if so, it is hi-z
+                if(rdHiZCheckPins[idx].getState() == wrHiZCheckPins[idx].getState()) {
+                    logger.info("Found pin \"" + rdHiZCheckPins[idx].pinName + "\" that has value \"" + rdHiZCheckPins[idx].getState() + "\"");
+                    hiz_pin_state[idx] = true;
+                } else {
+                    hiz_pin_state[idx] = false;
+                }
+
+                wrHiZCheckPins[idx].setState(!wrHiZCheckPins[idx].getState()); // Restore the state
+                writePinState(wrPins, false); // And read the state
+                readPinState(rdPins);
+            }
 
             // Mark read pins as HiZ
             for(int idx = 0; idx < hiz_pin_state.length; idx++) {
@@ -366,7 +368,7 @@ public class PeeperInterfaceController {
     }
 
     static private PinStatus[] extractHiZCheckPinList(PALSpecs pSpecs, PinStatus[] pins) {
-        int oMask = pSpecs.getMask_O();
+        int oMask = pSpecs.getMask_O() | pSpecs.getMask_IO();
         boolean is24Pins = pSpecs.getPinCount_IN() > 10;
         int[] hzpins = BitUtils.build_PinNumberListFromWriteMask(oMask, is24Pins);
         int pinCount = 0;
